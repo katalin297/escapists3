@@ -1,6 +1,9 @@
 package main;
 
 import entity.Player;
+import entity.Scene;
+import math.Vector2;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -11,55 +14,46 @@ import tile.TileManager;
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable {
 
-	// SCREEN SETTINGS
-   final int originalTileSize = 16;
-   final int scale = 3;
-   
-   public final int tileSize = originalTileSize * 3;
-   public final int maxScreenCol = 16;
-   public final int maxScreenRow = 12;
-   public final int screenWidth = tileSize * maxScreenCol;
-   public final int screenHeight = tileSize * maxScreenRow;
-   
-   public final int maxWorldCol = 50;
-   public final int maxWorldRow = 50;
-   public final int worldWidth = tileSize * maxWorldCol;
-   public final int worldHeight = tileSize * maxWorldRow;
-   
-   // FPS
-   int FPS = 60;
-   
-   TileManager tileM = new TileManager(this);
-   KeyHandler keyH = new KeyHandler();
-   Thread gameThread;
-   public Player player = new Player(this,keyH);
+   Thread GameThread;
+
+   TileManager TileManager = new TileManager();
+   Scene GameScene = new Scene();
 
    public GamePanel() {
     
-      this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+      this.setPreferredSize(new Dimension(Application.SCREEN_WIDTH, Application.SCREEN_HEIGHT));
       this.setBackground(Color.black);
       this.setDoubleBuffered(true);
-      this.addKeyListener(keyH);
       this.setFocusable(true);
+      this.addKeyListener(Input.GetInternalKeyHandler());
+      
+      Renderer.Initialize();
+      
+      
+      // Set up the scene
+      Player player = new Player();
+      GameScene.AddEntity(player);
+      
+      GameScene.OnInitalize();
    }
 
    public void startGameThread() {
-      gameThread = new Thread(this);
-      gameThread.start();
+	  GameThread = new Thread(this);
+      GameThread.start();
    }
 
    public void run() {
-      double drawInterval = (double)(1000000000 / this.FPS);
+      double drawInterval = (double)(1000000000 / Renderer.FRAMES_PER_SECOND);
       double delta = 0.0D;
       long lastTime = System.nanoTime();
       long timer = 0L;
-      while(this.gameThread != null) {
+      while(this.GameThread != null) {
          long currentTime = System.nanoTime();
          delta += (double)(currentTime - lastTime) / drawInterval;
          timer += currentTime - lastTime;
          lastTime = currentTime;
          if (delta >= 1.0D) {
-            this.update();
+            this.Update(delta);
             this.repaint();
             --delta;
          }
@@ -71,23 +65,38 @@ public class GamePanel extends JPanel implements Runnable {
 
    }
 
-   public void update() {
+   public void Update(double timeStep) {
 	   
-      player.update();
+	   Renderer.BeginScene();
+	   GameScene.OnUpdate(timeStep);
+	   Renderer.EndScene();
+
    }
 
-   public void paintComponent(Graphics g) {
+   public void paintComponent(Graphics graphicsAPI) {
 	   
-      super.paintComponent(g);
+      super.paintComponent(graphicsAPI);
       
-      Graphics2D g2 = (Graphics2D)g;
+      // Draw the whole objects in the game scene
+      TileManager.OnDraw();
+      GameScene.OnDraw();
       
-      tileM.draw(g2);
-
-
-      player.draw(g2);
       
-      g2.dispose();
+      
+      
+      Renderer.RenderFrame(this.GameScene.GetPrimaryCamera(), graphicsAPI);
+      
+      
+      
+      
+//      Graphics2D g2 = (Graphics2D)g;
+//      
+//      tileM.draw(g2);
+//
+//
+//      player.draw(g2);
+//      
+//      g2.dispose();
    }
 
 }

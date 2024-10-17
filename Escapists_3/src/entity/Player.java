@@ -1,143 +1,113 @@
- package entity;
+package entity;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
-import javax.imageio.ImageIO;
-import main.GamePanel;
-import main.KeyHandler;
 
-public class Player extends Entity {
+import java.util.HashMap;
+
+import assets.Asset;
+import assets.AssetType;
+import assets.Texture;
+import main.Input;
+import main.Renderer;
+import math.Vector2;
+
+public class Player implements Entity {
+
+	public Scene HierarchyScene = null;
 	
-   GamePanel gp;
-   KeyHandler keyH;
-   
-   public final int screenX;
-   public final int screenY;
+	// Movement
+	Vector2 Position;
+	int PlayerSpeed = 4;
 
-   public Player(GamePanel gp, KeyHandler keyH) {
-      this.gp = gp;
-      this.keyH = keyH;
-      
-      screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
-      screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
-      
-      setDefaultValues();
-      getPlayerImage();
-   }
+	// Texture/Animations
+	HashMap<String, Texture[]> PlayerAnimationTexture = new HashMap<>();
+	String Direction = "down";
+	int AnimationIndex = 0;
+	double AccumulatedTimeStep = 0.0;
 
-   public void setDefaultValues() {
-	   
-      worldX = gp.tileSize * 23;
-      worldY = gp.tileSize * 21;
-      speed = 4;
-      direction = "down";
-   }
+	
+	@Override
+	public void OnInitialize(Scene hierarchyScene) {
+		this.Position = new Vector2(500, 500);
+		this.HierarchyScene = hierarchyScene;
+		
+		LoadPlayerAssets();
+	}
+	
+	public void LoadPlayerAssets() {
+		try {
+			
+			this.PlayerAnimationTexture.put("up",         new Texture[2]);
+			this.PlayerAnimationTexture.get("up")[0] =    Asset.Load("/player/boy_up_1.png").<Texture>As();
+			this.PlayerAnimationTexture.get("up")[1] =    Asset.Load("/player/boy_up_2.png").<Texture>As();
+			
+			this.PlayerAnimationTexture.put("down",       new Texture[2]);
+			this.PlayerAnimationTexture.get("down")[0] =  Asset.Load("/player/boy_down_1.png").<Texture>As();
+			this.PlayerAnimationTexture.get("down")[1] =  Asset.Load("/player/boy_down_2.png").<Texture>As();
+			
+			this.PlayerAnimationTexture.put("left",       new Texture[2]);
+			this.PlayerAnimationTexture.get("left")[0] =  Asset.Load("/player/boy_left_1.png").<Texture>As();
+			this.PlayerAnimationTexture.get("left")[1] =  Asset.Load("/player/boy_left_2.png").<Texture>As();
+	    	
+			this.PlayerAnimationTexture.put("right",      new Texture[2]);
+			this.PlayerAnimationTexture.get("right")[0] = Asset.Load("/player/boy_right_1.png").<Texture>As();
+			this.PlayerAnimationTexture.get("right")[1] = Asset.Load("/player/boy_right_2.png").<Texture>As();
+			
+	    	
+		} catch (IOException e) {	  
+			e.printStackTrace();
+			
+		}
+	}
 
-   public void getPlayerImage() {
-      try {
-    	  
-         this.up1 = ImageIO.read(this.getClass().getResourceAsStream("/player/boy_up_1.png"));
-         this.up2 = ImageIO.read(this.getClass().getResourceAsStream("/player/boy_up_2.png"));
-         this.down1 = ImageIO.read(this.getClass().getResourceAsStream("/player/boy_down_1.png"));
-         this.down2 = ImageIO.read(this.getClass().getResourceAsStream("/player/boy_down_2.png"));
-         this.left1 = ImageIO.read(this.getClass().getResourceAsStream("/player/boy_left_1.png"));
-         this.left2 = ImageIO.read(this.getClass().getResourceAsStream("/player/boy_left_2.png"));
-         this.right1 = ImageIO.read(this.getClass().getResourceAsStream("/player/boy_right_1.png"));
-         this.right2 = ImageIO.read(this.getClass().getResourceAsStream("/player/boy_right_2.png"));
-         
-      } catch (IOException e) {
-    	  
-         e.printStackTrace();
-      }
+	@Override
+	public void OnUpdate(double timeStep) {
+		
+		AccumulatedTimeStep += timeStep;
+		
+		if(AccumulatedTimeStep >= 15.0) {
+			AccumulatedTimeStep = 0.0;
+			
+			if(Input.IsKeyPressed(KeyEvent.VK_W) ||
+			   Input.IsKeyPressed(KeyEvent.VK_S) ||
+			   Input.IsKeyPressed(KeyEvent.VK_A) ||
+			   Input.IsKeyPressed(KeyEvent.VK_D)
+			   ) {
+				this.AnimationIndex = this.AnimationIndex == 0 ? 1 : 0;
+			}
+		}
+		
+		// Walking in world space
+		if (Input.IsKeyPressed(KeyEvent.VK_W)) {
+			this.Direction = "up";
+			Position.Y -= PlayerSpeed * 1;
+	        
+		} else if (Input.IsKeyPressed(KeyEvent.VK_S)) {
+			this.Direction = "down";
+	    	Position.Y += PlayerSpeed * 1;
+	    }
+	        
+	    if (Input.IsKeyPressed(KeyEvent.VK_A)) {
+	    	this.Direction = "left";
+	        Position.X -= PlayerSpeed * 1;
+	        
+	        
+	    } else if (Input.IsKeyPressed(KeyEvent.VK_D)) {
+	    	this.Direction = "right";
+	        Position.X += PlayerSpeed * 1;
+	    }
+	    
+	}
 
-   }
+	@Override
+	public void OnDraw() {
+		Texture image = this.PlayerAnimationTexture.get(this.Direction)[this.AnimationIndex];
+	    
+		this.HierarchyScene.SetPrimaryCameraPosition(this.Position);
+	    Renderer.Submit(this.HierarchyScene.GetPrimaryCamera().CenterOfScreen, new Vector2(Renderer.TILE_SIZE), image, true);
+	}
+	
+}
 
-   public void update() {
-      if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
-    	  
-         if (keyH.upPressed) {
-            direction = "up";
-            worldY -= speed;
-            
-         } else if (keyH.downPressed) {
-        	direction = "down";
-        	worldY += speed;
-            
-         } else if (keyH.leftPressed) {
-            direction = "left";
-            worldX -= speed;
-            
-         } else if (keyH.rightPressed) {
-            direction = "right";
-            worldX += speed;
-         }
-       
-         spriteCounter++;
-         
-         if (spriteCounter > 12) {
-        	 
-            if (spriteNum == 1) {
-               spriteNum = 2;
-               
-            } else if (spriteNum == 2) {
-               spriteNum = 1;
-            }
 
-            spriteCounter = 0;
-         }
-      }
-
-   }
-
-  
-   public void draw(Graphics2D g2) {
-	   
-      BufferedImage image = null;
-      
-      switch(direction) {
-      case "up":
-            if (spriteNum == 1) {
-               image = up1;
-            }
-
-            if (spriteNum == 2) {
-               image = up2;
-            }  
-            break;    
-      case "down":
-          if (spriteNum == 1) {
-             image = down1;
-          }
-
-          if (spriteNum == 2) {
-             image = down2;
-          }
-          break;
-          
-      case "left":
-          if (spriteNum == 1) {
-             image = left1;
-          }
-
-          if (spriteNum == 2) {
-             image = left2;
-          }
-          break;
-          
-      case "right":
-          if (spriteNum == 1) {
-             image = right1;
-          }
-
-          if (spriteNum == 2) {
-             image = right2;
-          }
-          break;
-         
-       }
-    
-      g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
-
-      }
-   }

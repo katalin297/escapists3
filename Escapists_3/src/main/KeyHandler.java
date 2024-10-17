@@ -3,55 +3,24 @@ package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class KeyHandler implements KeyListener {
-   public boolean upPressed;
-   public boolean downPressed;
-   public boolean leftPressed;
-   public boolean rightPressed;
 
-   public void keyTyped(KeyEvent e) {
-   }
+	public Set<Integer> PressedKeys = new HashSet<>();
 
-   public void keyPressed(KeyEvent e) {
-	   
-      int code = e.getKeyCode();
-      
-      if (code == KeyEvent.VK_W) {
-         upPressed = true;
-      }
+	public void keyTyped(KeyEvent e) {
+		return;
+	}
 
-      if (code == KeyEvent.VK_S) {
-         downPressed = true;
-      }
+	public void keyPressed(KeyEvent e) {
+		int keyCode = e.getKeyCode();
+		PressedKeys.add(Integer.valueOf(keyCode));
+	}
 
-      if (code == KeyEvent.VK_A) {
-    	  leftPressed = true;
-      }
-
-      if (code == KeyEvent.VK_D) {
-    	  rightPressed = true;
-      }
-
-   }
-
-   public void keyReleased(KeyEvent e) {
-      int code = e.getKeyCode();
-      
-      if (code == KeyEvent.VK_W) {
-          upPressed = false;
-       }
-
-       if (code == KeyEvent.VK_S) {
-          downPressed = false;
-       }
-
-       if (code == KeyEvent.VK_A) {
-     	  leftPressed = false;
-       }
-
-       if (code == KeyEvent.VK_D) {
-     	  rightPressed = false;
-       }
-
-   }
+	public void keyReleased(KeyEvent e) {
+		int keyCode = e.getKeyCode();
+		PressedKeys.remove(Integer.valueOf(keyCode));
+	}
 }
