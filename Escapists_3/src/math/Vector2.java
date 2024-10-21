@@ -43,4 +43,8 @@ public class Vector2 {
 		return new Vector2(this.X / other.X, this.Y / other.Y);
 	}
 	
+	public String toString() {
+		return "(" + this.X + ", " + this.Y + ")";
+	}
+	
 }

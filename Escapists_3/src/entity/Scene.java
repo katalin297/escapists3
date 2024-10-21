@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import main.Camera;
 import math.Vector2;
+import physics.PhysicsSystem;
 
 public class Scene {
 	
@@ -26,6 +27,14 @@ public class Scene {
 		for(int i = 0; i < this.Entities.size(); i++) {
 			Entity currentEntity = this.Entities.get(i);
 			currentEntity.OnUpdate(timeStep);
+		}
+	}
+	
+	public void OnPhysicsUpdate(double timeStep) {
+		PhysicsSystem.ResetDynamicObjects();
+		for(int i = 0; i < this.Entities.size(); i++) {
+			Entity currentEntity = this.Entities.get(i);
+			currentEntity.OnPhysicsUpdate(timeStep);
 		}
 	}
 	

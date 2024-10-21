@@ -41,6 +41,7 @@ public class Renderer {
 	
 	public static void Initialize() {
 		RenderQueue = new ArrayList<RenderData>();
+		RenderQueue.clear();
 	}
 	
 	public static void BeginScene() {
@@ -63,6 +64,9 @@ public class Renderer {
 		for(int i = 0; i < RenderQueue.size(); i++){
 			RenderData currentData = RenderQueue.get(i);
 			
+			if(currentData == null) { continue; }
+			
+			
 			Vector2 screenPosition = camera.ComputeScreenPosition(currentData.Position);
 			
 			if(currentData.IsScreenPosition) {
@@ -76,6 +80,7 @@ public class Renderer {
 					null
 			);
 		}
+		RenderQueue.clear();
 	}
 	
 	

@@ -10,7 +10,9 @@ import assets.AssetType;
 import assets.Texture;
 import main.Input;
 import main.Renderer;
+import math.BoundingBox;
 import math.Vector2;
+import physics.PhysicsSystem;
 
 public class Player implements Entity {
 
@@ -29,7 +31,7 @@ public class Player implements Entity {
 	
 	@Override
 	public void OnInitialize(Scene hierarchyScene) {
-		this.Position = new Vector2(500, 500);
+		this.Position = new Vector2(0, 0);
 		this.HierarchyScene = hierarchyScene;
 		
 		LoadPlayerAssets();
@@ -63,7 +65,52 @@ public class Player implements Entity {
 
 	@Override
 	public void OnUpdate(double timeStep) {
+	
+		UpdateAnimation(timeStep);
 		
+		Vector2 previousPosition = new Vector2(this.Position.X, this.Position.Y);
+		
+		
+		// Walking in world space
+		if (Input.IsKeyPressed(KeyEvent.VK_W)) {
+			this.Direction = "up";
+			Position.Y -= PlayerSpeed * 1;
+	        
+		} else if (Input.IsKeyPressed(KeyEvent.VK_S)) {
+			this.Direction = "down";
+	    	Position.Y += PlayerSpeed * 1;
+	    }
+		
+		BoundingBox finalBoundingBox = new BoundingBox(new Vector2(this.Position.X + 8, this.Position.Y + 8), new Vector2(Renderer.TILE_SIZE - 16));
+	    if(PhysicsSystem.IsInCollision(finalBoundingBox) ) {
+	    	this.Position.Y = previousPosition.Y;
+	    }
+	    
+	    
+	        
+	    if (Input.IsKeyPressed(KeyEvent.VK_A)) {
+	    	this.Direction = "left";
+	        Position.X -= PlayerSpeed * 1;
+	        
+	        
+	    } else if (Input.IsKeyPressed(KeyEvent.VK_D)) {
+	    	this.Direction = "right";
+	        Position.X += PlayerSpeed * 1;
+	    }
+	    
+	    
+	    finalBoundingBox = new BoundingBox(new Vector2(this.Position.X + 8, this.Position.Y + 8), new Vector2(Renderer.TILE_SIZE - 16));
+	    if(PhysicsSystem.IsInCollision(finalBoundingBox) ) {
+	    	this.Position.X = previousPosition.X;
+	    	//System.out.println("Aaa");
+	    }
+	    
+	    
+
+	    
+	}
+	
+	public void UpdateAnimation(double timeStep) {
 		AccumulatedTimeStep += timeStep;
 		
 		if(AccumulatedTimeStep >= 15.0) {
@@ -77,33 +124,18 @@ public class Player implements Entity {
 				this.AnimationIndex = this.AnimationIndex == 0 ? 1 : 0;
 			}
 		}
-		
-		// Walking in world space
-		if (Input.IsKeyPressed(KeyEvent.VK_W)) {
-			this.Direction = "up";
-			Position.Y -= PlayerSpeed * 1;
-	        
-		} else if (Input.IsKeyPressed(KeyEvent.VK_S)) {
-			this.Direction = "down";
-	    	Position.Y += PlayerSpeed * 1;
-	    }
-	        
-	    if (Input.IsKeyPressed(KeyEvent.VK_A)) {
-	    	this.Direction = "left";
-	        Position.X -= PlayerSpeed * 1;
-	        
-	        
-	    } else if (Input.IsKeyPressed(KeyEvent.VK_D)) {
-	    	this.Direction = "right";
-	        Position.X += PlayerSpeed * 1;
-	    }
-	    
+	}
+	
+	@Override
+	public void OnPhysicsUpdate(double timeStep) {
+		return;
 	}
 
 	@Override
 	public void OnDraw() {
 		Texture image = this.PlayerAnimationTexture.get(this.Direction)[this.AnimationIndex];
 	    
+		//System.out.println(AnimationIndex);
 		this.HierarchyScene.SetPrimaryCameraPosition(this.Position);
 	    Renderer.Submit(this.HierarchyScene.GetPrimaryCamera().CenterOfScreen, new Vector2(Renderer.TILE_SIZE), image, true);
 	}

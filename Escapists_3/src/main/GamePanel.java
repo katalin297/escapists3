@@ -3,6 +3,7 @@ package main;
 import entity.Player;
 import entity.Scene;
 import math.Vector2;
+import physics.PhysicsSystem;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -21,82 +22,99 @@ public class GamePanel extends JPanel implements Runnable {
 
    public GamePanel() {
     
-      this.setPreferredSize(new Dimension(Application.SCREEN_WIDTH, Application.SCREEN_HEIGHT));
-      this.setBackground(Color.black);
-      this.setDoubleBuffered(true);
-      this.setFocusable(true);
-      this.addKeyListener(Input.GetInternalKeyHandler());
-      
-      Renderer.Initialize();
-      
-      
-      // Set up the scene
-      Player player = new Player();
-      GameScene.AddEntity(player);
-      
-      GameScene.OnInitalize();
+	   // Initalize the window and the renderer
+	   ConfigureWindow();
+	   Renderer.Initialize();
+	   
+	   SetUpScene(); 
    }
-
-   public void startGameThread() {
-	  GameThread = new Thread(this);
-      GameThread.start();
+   
+   void ConfigureWindow() {
+	   this.setPreferredSize(new Dimension(Application.SCREEN_WIDTH, Application.SCREEN_HEIGHT));
+	   this.setBackground(Color.black);
+	   this.setDoubleBuffered(true);
+	   this.setFocusable(true);
+	   this.addKeyListener(Input.GetInternalKeyHandler());
+   }
+   
+   void SetUpScene() {
+	   // Set up the scene
+	   Player player = new Player();
+	   GameScene.AddEntity(player);
+	   
+	   PhysicsSystem.Initialize();
+	   GameScene.OnInitalize();
+	   TileManager.Initialize();
+   }
+   
+   public void Update(double timeStep) {
+	   // Begin preparing the scene
+	   Renderer.BeginScene();
+	   
+	   // Before updating the actual scene, we have to firstly
+	   // to prepare the physics scene in order for the entities
+	   // to be able to know if they collided
+	   GameScene.OnPhysicsUpdate(timeStep);
+	   
+	   // Update the game scene with all the entities
+	   GameScene.OnUpdate(timeStep);
+	   
+	   // End recording the scene
+	   Renderer.EndScene();	      
    }
 
    public void run() {
-      double drawInterval = (double)(1000000000 / Renderer.FRAMES_PER_SECOND);
-      double delta = 0.0D;
-      long lastTime = System.nanoTime();
-      long timer = 0L;
-      while(this.GameThread != null) {
-         long currentTime = System.nanoTime();
-         delta += (double)(currentTime - lastTime) / drawInterval;
-         timer += currentTime - lastTime;
-         lastTime = currentTime;
-         if (delta >= 1.0D) {
-            this.Update(delta);
-            this.repaint();
-            --delta;
-         }
-
-         if (timer >= 1000000000L) {
-            timer = 0L;
-         }
-      }
-
-   }
-
-   public void Update(double timeStep) {
 	   
-	   Renderer.BeginScene();
-	   GameScene.OnUpdate(timeStep);
-	   Renderer.EndScene();
+	   double drawInterval = (double)(1000000000 / Renderer.FRAMES_PER_SECOND);
+	   double delta = 0.0D;
+	   long lastTime = System.nanoTime();
+	   long timer = 0L;
+	   while(this.GameThread != null) {
+		   long currentTime = System.nanoTime();
+		   delta += (double)(currentTime - lastTime) / drawInterval;
+		   timer += currentTime - lastTime;
+		   lastTime = currentTime;
+		   
+		   // If delta is more than 1, it means that at this time we should render a frame
+		   if (delta >= 1.0D) {
+			   // Update the scene firstly (player, NPCs, etc.)
+			   this.Update(delta);
+            
+			   // After that, draw the frame
+			   this.repaint();
+            
+			   --delta;
+		   }
+
+		   if (timer >= 1000000000L) {
+			   timer = 0L;
+		   }
+	   }
 
    }
+
+   public void startGameThread() {
+	   GameThread = new Thread(this);
+	   GameThread.start();
+   }
+
 
    public void paintComponent(Graphics graphicsAPI) {
-	   
       super.paintComponent(graphicsAPI);
       
-      // Draw the whole objects in the game scene
+      // (Firstly draw the map, and after draw the characters over it)
+      // Draw the Map
       TileManager.OnDraw();
+
+      // Draw the objects in the whole game scene
       GameScene.OnDraw();
       
       
-      
-      
+      // Render the submited objects into the screen
       Renderer.RenderFrame(this.GameScene.GetPrimaryCamera(), graphicsAPI);
       
-      
-      
-      
-//      Graphics2D g2 = (Graphics2D)g;
-//      
-//      tileM.draw(g2);
-//
-//
-//      player.draw(g2);
-//      
-//      g2.dispose();
+      // Release the graphics handler from memory
+      graphicsAPI.dispose();
    }
 
 }
