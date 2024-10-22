@@ -5,8 +5,8 @@ import javax.swing.JFrame;
 
 public class Application {
 	
-   public static final int SCREEN_WIDTH = 1280;
-   public static final int SCREEN_HEIGHT = 720;
+   public static final int SCREEN_WIDTH = 1600;
+   public static final int SCREEN_HEIGHT = 900;
 	
    public static void main(String[] args) {
 	   

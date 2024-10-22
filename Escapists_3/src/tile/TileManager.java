@@ -10,10 +10,10 @@ import assets.Asset;
 import assets.Texture;
 import main.Application;
 import main.GamePanel;
-import main.Renderer;
 import math.BoundingBox;
 import math.Vector2;
 import physics.PhysicsSystem;
+import renderer.Renderer;
 
 public class TileManager {
 
@@ -35,18 +35,87 @@ public class TileManager {
    }
 
    public void GetTileTextures() {
-      try {
-    	 this.TileTextures.put("0", Asset.Load("/tiles/grass.png").<Texture>As());
-    	 this.TileTextures.put("1", Asset.Load("/tiles/wall.png").<Texture>As());
-    	 this.TileTextures.put("2", Asset.Load("/tiles/water.png").<Texture>As());
-    	 this.TileTextures.put("3", Asset.Load("/tiles/earth.png").<Texture>As());
-    	 this.TileTextures.put("4", Asset.Load("/tiles/tree.png").<Texture>As());
-    	 this.TileTextures.put("5", Asset.Load("/tiles/sand.png").<Texture>As());
-    	 
-         
-      } catch (IOException e) {
-         e.printStackTrace();
-      }
+	   
+	   
+	  /* 
+		s - sand
+		w - water
+		g - grass
+		
+		t - tree
+		b - bed
+		d - doors (din jos in sus textura)
+		
+		f - prison floor
+		
+		// - for towers
+		0 - vertical   |
+		1 - orizontal  ==
+		
+		2 
+		 |==
+		 |
+		
+		3 
+		 ==|
+		   |
+		
+		4
+		 |
+		 |==
+		
+		5 
+		   |
+		 ==|
+		 
+		 
+		 // - for prison itself
+		 6 - vertical   |
+		 7 - orizontal  ==
+		 
+		 8 
+		  |==
+		  |
+		
+		 9 
+		  ==|
+		    |
+		
+		 +
+		  |
+		  |==
+		
+		 -  
+		    |
+		  ==|
+		 
+		 
+		
+
+	  */
+	   
+	   
+	   try {
+		   this.TileTextures.put("g", Asset.Load("/tiles/grass.png").<Texture>As());
+		   this.TileTextures.put("w", Asset.Load("/tiles/water.png").<Texture>As());
+		   this.TileTextures.put("s", Asset.Load("/tiles/sand.png").<Texture>As());
+		   
+		   
+		   this.TileTextures.put("0", Asset.Load("/tiles/wall.png").<Texture>As()); // change
+		   this.TileTextures.put("1", Asset.Load("/tiles/wall.png").<Texture>As()); // change
+		   this.TileTextures.put("2", Asset.Load("/tiles/wall.png").<Texture>As()); // change
+		   this.TileTextures.put("3", Asset.Load("/tiles/wall.png").<Texture>As()); // change
+		   this.TileTextures.put("4", Asset.Load("/tiles/wall.png").<Texture>As()); // change
+		   this.TileTextures.put("5", Asset.Load("/tiles/wall.png").<Texture>As()); // change
+		   
+		   this.TileTextures.put("m", Asset.Load("/tiles/earth.png").<Texture>As());
+		   this.TileTextures.put("n", Asset.Load("/tiles/wall.png").<Texture>As()); // change (to dark)
+		   
+		   
+		   
+	   } catch (IOException e) {
+		   e.printStackTrace();
+	   }
 
    }
 
@@ -66,54 +135,38 @@ public class TileManager {
         	 
         	 String mapInputLine = mapInputReader.readLine();
         	 String physicsMapInputLine = physicsMapInputReader.readLine();
-        	 
-        	 //System.out.println(mapInputLine);
-        	 
-        	 
-        	 //System.out.print("New:\n");
 
         	 while (col < Renderer.MAX_WORLD_SIZE.X) {
         		 
         		 String numbers[] = mapInputLine.split(" ");
         		 String num = numbers[col];
         		 
-        		 //String numbersPhysics[] = physicsMapInputLine.split(" ");
-        		 //int numPhysics = Integer.parseInt(numbersPhysics[col]);
+        		 String numbersPhysics[] = physicsMapInputLine.split(" ");
+        		 int numPhysics = Integer.parseInt(numbersPhysics[col]);
 
         		 
         		 
         		 
-        		 this.MapTile[row][col] = num;
+        		 this.MapTile[row][col] = num; 
         		 
-        		 
-        		// System.out.print(num + " ");
-        		 
-        		 
-        		 
-//        		 if(numPhysics == 1) {
+        		 if(numPhysics == 1) {
 //        			 BoundingBox finalBB = new BoundingBox(
 //            				 new Vector2(col * Renderer.TILE_SIZE - Application.SCREEN_WIDTH / 2 + Renderer.TILE_SIZE / 2, row * Renderer.TILE_SIZE - Application.SCREEN_HEIGHT / 2 + Renderer.TILE_SIZE / 2),
 //            				 new Vector2(Renderer.TILE_SIZE)
 //            				 
 //            		 );
-//            		 
-////            		 System.out.print(finalBB.UpLeft.toString());
-////            		 System.out.print(finalBB.UpRight.toString());
-////            		 System.out.print(finalBB.DownLeft.toString());
-////            		 System.out.println(finalBB.DownRight.toString());
-//            		 
-//            		 PhysicsSystem.AddStaticObject(
-//            				 new Vector2(col * Renderer.TILE_SIZE - Application.SCREEN_WIDTH / 2 + Renderer.TILE_SIZE / 2, row * Renderer.TILE_SIZE - Application.SCREEN_HEIGHT / 2 + Renderer.TILE_SIZE / 2),
-//            				 new Vector2(Renderer.TILE_SIZE)
-//            				 
-//            				 );
-//        		 }
-//        		
-        		 
-        		 
-        		 
-        		 
-        		 
+            		 
+//            		 System.out.print(finalBB.UpLeft.toString());
+//            		 System.out.print(finalBB.UpRight.toString());
+//            		 System.out.print(finalBB.DownLeft.toString());
+//            		 System.out.println(finalBB.DownRight.toString());
+            		 
+            		 PhysicsSystem.AddStaticObject(
+            				 new Vector2(col * Renderer.TILE_SIZE - Application.SCREEN_WIDTH / 2 + Renderer.TILE_SIZE / 2, row * Renderer.TILE_SIZE - Application.SCREEN_HEIGHT / 2 + Renderer.TILE_SIZE / 2),
+            				 new Vector2(Renderer.TILE_SIZE)
+            				 
+            				 );
+        		 }
         		 
         		 col++;
         		 
@@ -148,7 +201,7 @@ public class TileManager {
 		   String tileType = this.MapTile[worldRow][worldCol];
 		   
 		   Vector2 worldPosTile = new Vector2(worldCol * Renderer.TILE_SIZE, worldRow * Renderer.TILE_SIZE);		   
-		   Renderer.Submit(worldPosTile, new Vector2(Renderer.TILE_SIZE), TileTextures.get(tileType));
+		   Renderer.SubmitDebug(worldPosTile, new Vector2(Renderer.TILE_SIZE), TileTextures.get(tileType), tileType);
 		   
 		   
 		   worldCol++;

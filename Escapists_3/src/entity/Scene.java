@@ -2,9 +2,9 @@ package entity;
 
 import java.util.ArrayList;
 
-import main.Camera;
 import math.Vector2;
 import physics.PhysicsSystem;
+import renderer.Camera;
 
 public class Scene {
 	

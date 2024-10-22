@@ -1,8 +1,7 @@
-package main;
+package renderer;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-//import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 import assets.Texture;
@@ -13,11 +12,19 @@ class RenderData {
 	public Vector2 Scale = new Vector2();
 	public Texture EntityTexture = null;
 	public boolean IsScreenPosition = false;
+	public String DebugString = "";
 	
 	public RenderData(Vector2 position, Vector2 scale, Texture texture) {
 		this.Position = position;
 		this.Scale = scale;
 		this.EntityTexture = texture;
+	}
+	
+	public RenderData(Vector2 position, Vector2 scale, Texture texture, String str) {
+		this.Position = position;
+		this.Scale = scale;
+		this.EntityTexture = texture;
+		this.DebugString = str;
 	}
 	
 	public RenderData(Vector2 position, Vector2 scale, Texture texture, boolean isScreenPosition) {
@@ -31,7 +38,7 @@ class RenderData {
 public class Renderer {
 
 	// GLOBAL SCREEN/WORLD SETTINGS
-	public static final int TILE_SIZE = 16 * 3;
+	public static final int TILE_SIZE = 16 * 4;
 	public static final Vector2 MAX_WORLD_SIZE = new Vector2(100, 100);
 	public static final int FRAMES_PER_SECOND = 60;
 	
@@ -46,6 +53,10 @@ public class Renderer {
 	
 	public static void BeginScene() {
 		RenderQueue.clear();
+	}
+	
+	public static void SubmitDebug(Vector2 position, Vector2 scale, Texture texture, String str) {
+		RenderQueue.add(new RenderData(position, scale, texture, str));
 	}
 	
 	public static void Submit(Vector2 position, Vector2 scale, Texture texture) {
@@ -71,6 +82,10 @@ public class Renderer {
 			
 			if(currentData.IsScreenPosition) {
 				screenPosition = currentData.Position;
+			}
+			
+			if(currentData.EntityTexture == null) {
+				System.out.println("a");
 			}
 			
 			((Graphics2D)graphicsAPI).drawImage(

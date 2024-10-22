@@ -9,10 +9,10 @@ import assets.Asset;
 import assets.AssetType;
 import assets.Texture;
 import main.Input;
-import main.Renderer;
 import math.BoundingBox;
 import math.Vector2;
 import physics.PhysicsSystem;
+import renderer.Renderer;
 
 public class Player implements Entity {
 
@@ -29,10 +29,13 @@ public class Player implements Entity {
 	double AccumulatedTimeStep = 0.0;
 
 	
+	PlayerInventory Inventory;
+	
 	@Override
 	public void OnInitialize(Scene hierarchyScene) {
-		this.Position = new Vector2(0, 0);
+		this.Position = new Vector2(50 * Renderer.TILE_SIZE, 50 * Renderer.TILE_SIZE);
 		this.HierarchyScene = hierarchyScene;
+		this.Inventory = new PlayerInventory();
 		
 		LoadPlayerAssets();
 	}
@@ -138,6 +141,9 @@ public class Player implements Entity {
 		//System.out.println(AnimationIndex);
 		this.HierarchyScene.SetPrimaryCameraPosition(this.Position);
 	    Renderer.Submit(this.HierarchyScene.GetPrimaryCamera().CenterOfScreen, new Vector2(Renderer.TILE_SIZE), image, true);
+	    
+	    
+	    this.Inventory.OnDraw();
 	}
 	
 }

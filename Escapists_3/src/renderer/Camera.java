@@ -1,5 +1,6 @@
-package main;
+package renderer;
 
+import main.Application;
 import math.Vector2;
 
 public class Camera {

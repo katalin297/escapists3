@@ -36,8 +36,6 @@ public class PhysicsSystem {
 		
 		// Check all the dynamic objects firstly
 		for(int i = 0; i < DynamicObjects.size(); i++) {
-//			System.out.println(finalBB.UpLeft.toString());
-   		 
 			if(DynamicObjects.get(i).IsInBoundingBox(object)) { return true; }
 		}
 		
@@ -45,7 +43,6 @@ public class PhysicsSystem {
 		// Then if nothing collided, then check all the static ones
 		for(int i = 0; i < StaticObjects.size(); i++) {
 			if(StaticObjects.get(i).IsInBoundingBox(object)) { return true; }
-			//System.out.println(i);
 		}
 		
 		// If nothing collided at all, then return false

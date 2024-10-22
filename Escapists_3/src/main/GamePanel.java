@@ -3,12 +3,16 @@ package main;
 import entity.Player;
 import entity.Scene;
 import math.Vector2;
+import math.Vector4;
 import physics.PhysicsSystem;
+import renderer.Renderer;
+import renderer.UserInterface;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+
 import javax.swing.JPanel;
 import tile.TileManager;
 
@@ -45,6 +49,7 @@ public class GamePanel extends JPanel implements Runnable {
 	   PhysicsSystem.Initialize();
 	   GameScene.OnInitalize();
 	   TileManager.Initialize();
+	   UserInterface.Initalize();
    }
    
    public void Update(double timeStep) {
@@ -60,7 +65,13 @@ public class GamePanel extends JPanel implements Runnable {
 	   GameScene.OnUpdate(timeStep);
 	   
 	   // End recording the scene
-	   Renderer.EndScene();	      
+	   Renderer.EndScene();	    
+	   
+	   UserInterface.DrawRectangle(
+			   new Vector2(40, 620), new Vector2(600, 240), new Vector4(0, 0, 0, 200), 32,
+			   5, new Vector4(255, 255, 255, 255), 22);
+	   
+	   UserInterface.DrawText(new Vector2(70, 670), 32, "Catalin gay");
    }
 
    public void run() {
@@ -107,11 +118,13 @@ public class GamePanel extends JPanel implements Runnable {
       TileManager.OnDraw();
 
       // Draw the objects in the whole game scene
-      GameScene.OnDraw();
-      
+      GameScene.OnDraw();      
       
       // Render the submited objects into the screen
       Renderer.RenderFrame(this.GameScene.GetPrimaryCamera(), graphicsAPI);
+      
+      // Finally, draw the user interface (after everything was rendered)
+      UserInterface.OnDraw((Graphics2D)graphicsAPI);
       
       // Release the graphics handler from memory
       graphicsAPI.dispose();
