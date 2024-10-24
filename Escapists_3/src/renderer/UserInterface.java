@@ -3,10 +3,14 @@ package renderer;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import assets.Asset;
+import assets.FontText;
 import math.Vector2;
 import math.Vector4;
 
@@ -55,10 +59,18 @@ class InterfaceRenderData {
 
 public class UserInterface {
 	
-	static ArrayList<InterfaceRenderData> RenderData = new ArrayList<InterfaceRenderData>();  
+	static ArrayList<InterfaceRenderData> RenderData = new ArrayList<InterfaceRenderData>();
+	static FontText FontUI = null;
 	
 	public static void Initalize() {
-		return;
+		try {
+			FontUI = Asset.Load("/fonts/PixelifySans-VariableFont.ttf").<FontText>As();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public static void DrawRectangle(Vector2 position, Vector2 scale, Vector4 color, int roundedCorner) {
@@ -75,6 +87,8 @@ public class UserInterface {
 	
 	public static void OnDraw(Graphics2D graphicsAPI) {
 
+		graphicsAPI.setFont(FontUI.InternalFont);
+		
 		for(int i = 0; i < RenderData.size(); i++) {
 			InterfaceRenderData renderData = RenderData.get(i);
 			

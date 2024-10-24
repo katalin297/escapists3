@@ -34,6 +34,7 @@ public class PhysicsSystem {
 	
 	public static boolean IsInCollision(BoundingBox object) {
 		
+		
 		// Check all the dynamic objects firstly
 		for(int i = 0; i < DynamicObjects.size(); i++) {
 			if(DynamicObjects.get(i).IsInBoundingBox(object)) { return true; }

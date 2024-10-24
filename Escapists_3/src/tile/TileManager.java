@@ -1,5 +1,6 @@
 package tile;
 
+import java.awt.FontFormatException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,6 +49,14 @@ public class TileManager {
 		
 		f - prison floor
 		
+		= - horizontal door
+		| - vertical doOr
+		
+		[ - bed part 1
+		] - bed part 1
+		
+		
+		
 		// - for towers
 		0 - vertical   |
 		1 - orizontal  ==
@@ -89,7 +98,6 @@ public class TileManager {
 		    |
 		  ==|
 		 
-		 
 		
 
 	  */
@@ -100,7 +108,7 @@ public class TileManager {
 		   this.TileTextures.put("w", Asset.Load("/tiles/water.png").<Texture>As());
 		   this.TileTextures.put("s", Asset.Load("/tiles/sand.png").<Texture>As());
 		   
-		   
+		   // Tower
 		   this.TileTextures.put("0", Asset.Load("/tiles/wall.png").<Texture>As()); // change
 		   this.TileTextures.put("1", Asset.Load("/tiles/wall.png").<Texture>As()); // change
 		   this.TileTextures.put("2", Asset.Load("/tiles/wall.png").<Texture>As()); // change
@@ -108,6 +116,24 @@ public class TileManager {
 		   this.TileTextures.put("4", Asset.Load("/tiles/wall.png").<Texture>As()); // change
 		   this.TileTextures.put("5", Asset.Load("/tiles/wall.png").<Texture>As()); // change
 		   
+		   // Prison
+		   this.TileTextures.put("6", Asset.Load("/tiles/wall.png").<Texture>As()); // change
+		   this.TileTextures.put("7", Asset.Load("/tiles/wall.png").<Texture>As()); // change
+		   this.TileTextures.put("8", Asset.Load("/tiles/wall.png").<Texture>As()); // change
+		   this.TileTextures.put("9", Asset.Load("/tiles/wall.png").<Texture>As()); // change
+		   this.TileTextures.put("+", Asset.Load("/tiles/wall.png").<Texture>As()); // change
+		   this.TileTextures.put("-", Asset.Load("/tiles/wall.png").<Texture>As()); // change
+		   
+		   // Doors
+		   this.TileTextures.put("|", Asset.Load("/tiles/door_vertical.png").<Texture>As());
+		   this.TileTextures.put("=", Asset.Load("/tiles/door_horizontal.png").<Texture>As());
+		   
+		   // Bed
+		   this.TileTextures.put("[", Asset.Load("/tiles/bedTop.png").<Texture>As());
+		   this.TileTextures.put("]", Asset.Load("/tiles/bedBottom.png").<Texture>As());
+		   
+		   
+		   this.TileTextures.put("f", Asset.Load("/tiles/prison_floor.png").<Texture>As());
 		   this.TileTextures.put("m", Asset.Load("/tiles/earth.png").<Texture>As());
 		   this.TileTextures.put("n", Asset.Load("/tiles/wall.png").<Texture>As()); // change (to dark)
 		   
@@ -115,7 +141,9 @@ public class TileManager {
 		   
 	   } catch (IOException e) {
 		   e.printStackTrace();
-	   }
+	   } catch (FontFormatException e) {
+		e.printStackTrace();
+	}
 
    }
 
@@ -200,6 +228,11 @@ public class TileManager {
 		   
 		   String tileType = this.MapTile[worldRow][worldCol];
 		   
+//		   if(TileTextures.get(tileType) == null) {
+//			   return;
+//		   }
+		   
+		   
 		   Vector2 worldPosTile = new Vector2(worldCol * Renderer.TILE_SIZE, worldRow * Renderer.TILE_SIZE);		   
 		   Renderer.SubmitDebug(worldPosTile, new Vector2(Renderer.TILE_SIZE), TileTextures.get(tileType), tileType);
 		   
@@ -213,18 +246,3 @@ public class TileManager {
 	   }   
    }   
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

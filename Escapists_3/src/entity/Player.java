@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.FontFormatException;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
@@ -12,6 +13,7 @@ import main.Input;
 import math.BoundingBox;
 import math.Vector2;
 import physics.PhysicsSystem;
+import renderer.DialogueSystem;
 import renderer.Renderer;
 
 public class Player implements Entity {
@@ -59,10 +61,17 @@ public class Player implements Entity {
 			this.PlayerAnimationTexture.get("right")[0] = Asset.Load("/player/boy_right_1.png").<Texture>As();
 			this.PlayerAnimationTexture.get("right")[1] = Asset.Load("/player/boy_right_2.png").<Texture>As();
 			
+			this.PlayerAnimationTexture.put("idle",       new Texture[2]);
+			this.PlayerAnimationTexture.get("idle")[0] =  this.PlayerAnimationTexture.get("down")[0];
+			this.PlayerAnimationTexture.get("idle")[1] =  this.PlayerAnimationTexture.get("down")[0];
+			
 	    	
 		} catch (IOException e) {	  
 			e.printStackTrace();
 			
+		} catch (FontFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -72,16 +81,19 @@ public class Player implements Entity {
 		UpdateAnimation(timeStep);
 		
 		Vector2 previousPosition = new Vector2(this.Position.X, this.Position.Y);
+		boolean pressedAnyButton = false;
 		
 		
 		// Walking in world space
 		if (Input.IsKeyPressed(KeyEvent.VK_W)) {
 			this.Direction = "up";
 			Position.Y -= PlayerSpeed * 1;
+			pressedAnyButton = true;
 	        
 		} else if (Input.IsKeyPressed(KeyEvent.VK_S)) {
 			this.Direction = "down";
 	    	Position.Y += PlayerSpeed * 1;
+	    	pressedAnyButton = true;
 	    }
 		
 		BoundingBox finalBoundingBox = new BoundingBox(new Vector2(this.Position.X + 8, this.Position.Y + 8), new Vector2(Renderer.TILE_SIZE - 16));
@@ -94,11 +106,13 @@ public class Player implements Entity {
 	    if (Input.IsKeyPressed(KeyEvent.VK_A)) {
 	    	this.Direction = "left";
 	        Position.X -= PlayerSpeed * 1;
+	        pressedAnyButton = true;
 	        
 	        
 	    } else if (Input.IsKeyPressed(KeyEvent.VK_D)) {
 	    	this.Direction = "right";
 	        Position.X += PlayerSpeed * 1;
+	        pressedAnyButton = true;
 	    }
 	    
 	    
@@ -106,6 +120,11 @@ public class Player implements Entity {
 	    if(PhysicsSystem.IsInCollision(finalBoundingBox) ) {
 	    	this.Position.X = previousPosition.X;
 	    	//System.out.println("Aaa");
+	    }
+	    
+	    if(!pressedAnyButton) {
+	    	this.Direction = "idle";
+	    	
 	    }
 	    
 	    
@@ -138,10 +157,8 @@ public class Player implements Entity {
 	public void OnDraw() {
 		Texture image = this.PlayerAnimationTexture.get(this.Direction)[this.AnimationIndex];
 	    
-		//System.out.println(AnimationIndex);
 		this.HierarchyScene.SetPrimaryCameraPosition(this.Position);
 	    Renderer.Submit(this.HierarchyScene.GetPrimaryCamera().CenterOfScreen, new Vector2(Renderer.TILE_SIZE), image, true);
-	    
 	    
 	    this.Inventory.OnDraw();
 	}

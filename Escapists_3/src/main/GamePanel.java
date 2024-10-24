@@ -1,10 +1,12 @@
 package main;
 
 import entity.Player;
+import entity.PoliceNPC;
 import entity.Scene;
 import math.Vector2;
 import math.Vector4;
 import physics.PhysicsSystem;
+import renderer.DialogueSystem;
 import renderer.Renderer;
 import renderer.UserInterface;
 
@@ -46,10 +48,21 @@ public class GamePanel extends JPanel implements Runnable {
 	   Player player = new Player();
 	   GameScene.AddEntity(player);
 	   
+	   PoliceNPC policeNPC = new PoliceNPC();
+	   GameScene.AddEntity(policeNPC);
+	   
+	   
+	   
 	   PhysicsSystem.Initialize();
 	   GameScene.OnInitalize();
 	   TileManager.Initialize();
 	   UserInterface.Initalize();
+	   DialogueSystem.Initalize();
+	   
+	   
+	   DialogueSystem.DrawDialogue("Player", "Welcome to the game!");
+	   DialogueSystem.DrawDialogue("Player", "Denis cel mai pizdos");
+	   DialogueSystem.DrawDialogue("Player", "Catalin gay");
    }
    
    public void Update(double timeStep) {
@@ -67,11 +80,8 @@ public class GamePanel extends JPanel implements Runnable {
 	   // End recording the scene
 	   Renderer.EndScene();	    
 	   
-	   UserInterface.DrawRectangle(
-			   new Vector2(40, 620), new Vector2(600, 240), new Vector4(0, 0, 0, 200), 32,
-			   5, new Vector4(255, 255, 255, 255), 22);
+	   DialogueSystem.OnUpdate(timeStep);
 	   
-	   UserInterface.DrawText(new Vector2(70, 670), 32, "Catalin gay");
    }
 
    public void run() {
@@ -87,7 +97,7 @@ public class GamePanel extends JPanel implements Runnable {
 		   lastTime = currentTime;
 		   
 		   // If delta is more than 1, it means that at this time we should render a frame
-		   if (delta >= 1.0D) {
+		   if (delta >= 1.0) {
 			   // Update the scene firstly (player, NPCs, etc.)
 			   this.Update(delta);
             
@@ -122,6 +132,9 @@ public class GamePanel extends JPanel implements Runnable {
       
       // Render the submited objects into the screen
       Renderer.RenderFrame(this.GameScene.GetPrimaryCamera(), graphicsAPI);
+      
+      // Before rendering the UI, we should submit the draw calls to the UserInterface System
+      DialogueSystem.OnDraw();
       
       // Finally, draw the user interface (after everything was rendered)
       UserInterface.OnDraw((Graphics2D)graphicsAPI);

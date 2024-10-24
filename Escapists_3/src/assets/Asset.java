@@ -1,5 +1,6 @@
 package assets;
 
+import java.awt.FontFormatException;
 import java.io.IOException;
 
 import util.Utils;
@@ -8,7 +9,7 @@ public class Asset {
 	
 	AssetType Type;
 	
-	public static Asset Load(String filepath) throws IOException {
+	public static Asset Load(String filepath) throws IOException, FontFormatException {
 		
 		String fileExtension = Utils.GetFileExtension(filepath);
 		
@@ -16,6 +17,8 @@ public class Asset {
 			case "png":
 			case "jpg":
 				return new Texture(filepath);
+			case "ttf":
+				return new FontText(filepath);
 			case ".wav":
 				// TODO: Adds sound system
 			default:

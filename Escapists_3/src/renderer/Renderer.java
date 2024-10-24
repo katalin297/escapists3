@@ -48,11 +48,10 @@ public class Renderer {
 	
 	public static void Initialize() {
 		RenderQueue = new ArrayList<RenderData>();
-		RenderQueue.clear();
 	}
 	
 	public static void BeginScene() {
-		RenderQueue.clear();
+		
 	}
 	
 	public static void SubmitDebug(Vector2 position, Vector2 scale, Texture texture, String str) {
@@ -72,6 +71,9 @@ public class Renderer {
 	}
 	
 	public static void RenderFrame(Camera camera, Graphics graphicsAPI) {
+		
+		Graphics2D graphicsAPI2D = (Graphics2D)graphicsAPI;
+		
 		for(int i = 0; i < RenderQueue.size(); i++){
 			RenderData currentData = RenderQueue.get(i);
 			
@@ -88,7 +90,7 @@ public class Renderer {
 				System.out.println("a");
 			}
 			
-			((Graphics2D)graphicsAPI).drawImage(
+			graphicsAPI2D.drawImage(
 					currentData.EntityTexture.InternalImage,
 					screenPosition.X, screenPosition.Y,
 					currentData.Scale.X, currentData.Scale.Y,
