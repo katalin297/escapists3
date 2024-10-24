@@ -109,20 +109,20 @@ public class TileManager {
 		   this.TileTextures.put("s", Asset.Load("/tiles/sand.png").<Texture>As());
 		   
 		   // Tower
-		   this.TileTextures.put("0", Asset.Load("/tiles/wall.png").<Texture>As()); // change
-		   this.TileTextures.put("1", Asset.Load("/tiles/wall.png").<Texture>As()); // change
-		   this.TileTextures.put("2", Asset.Load("/tiles/wall.png").<Texture>As()); // change
-		   this.TileTextures.put("3", Asset.Load("/tiles/wall.png").<Texture>As()); // change
-		   this.TileTextures.put("4", Asset.Load("/tiles/wall.png").<Texture>As()); // change
-		   this.TileTextures.put("5", Asset.Load("/tiles/wall.png").<Texture>As()); // change
+		   this.TileTextures.put("0", Asset.Load("/tiles/wall_tower/wall_tower_0.png").<Texture>As()); // change
+		   this.TileTextures.put("1", Asset.Load("/tiles/wall_tower/wall_tower_1.png").<Texture>As()); // change
+		   this.TileTextures.put("2", Asset.Load("/tiles/wall_tower/wall_tower_2.png").<Texture>As()); // change
+		   this.TileTextures.put("3", Asset.Load("/tiles/wall_tower/wall_tower_3.png").<Texture>As()); // change
+		   this.TileTextures.put("4", Asset.Load("/tiles/wall_tower/wall_tower_4.png").<Texture>As()); // change
+		   this.TileTextures.put("5", Asset.Load("/tiles/wall_tower/wall_tower_5.png").<Texture>As()); // change
 		   
 		   // Prison
-		   this.TileTextures.put("6", Asset.Load("/tiles/wall.png").<Texture>As()); // change
-		   this.TileTextures.put("7", Asset.Load("/tiles/wall.png").<Texture>As()); // change
-		   this.TileTextures.put("8", Asset.Load("/tiles/wall.png").<Texture>As()); // change
-		   this.TileTextures.put("9", Asset.Load("/tiles/wall.png").<Texture>As()); // change
-		   this.TileTextures.put("+", Asset.Load("/tiles/wall.png").<Texture>As()); // change
-		   this.TileTextures.put("-", Asset.Load("/tiles/wall.png").<Texture>As()); // change
+		   this.TileTextures.put("6", Asset.Load("/tiles/wall_prison/wall_prison_0.png").<Texture>As()); // change
+		   this.TileTextures.put("7", Asset.Load("/tiles/wall_prison/wall_prison_1.png").<Texture>As()); // change
+		   this.TileTextures.put("8", Asset.Load("/tiles/wall_prison/wall_prison_2.png").<Texture>As()); // change
+		   this.TileTextures.put("9", Asset.Load("/tiles/wall_prison/wall_prison_3.png").<Texture>As()); // change
+		   this.TileTextures.put("+", Asset.Load("/tiles/wall_prison/wall_prison_4.png").<Texture>As()); // change
+		   this.TileTextures.put("-", Asset.Load("/tiles/wall_prison/wall_prison_5.png").<Texture>As()); // change
 		   
 		   // Doors
 		   this.TileTextures.put("|", Asset.Load("/tiles/door_vertical.png").<Texture>As());
@@ -131,6 +131,10 @@ public class TileManager {
 		   // Bed
 		   this.TileTextures.put("[", Asset.Load("/tiles/bedTop.png").<Texture>As());
 		   this.TileTextures.put("]", Asset.Load("/tiles/bedBottom.png").<Texture>As());
+		   
+		   
+		   // Outside floor
+		   this.TileTextures.put("_", Asset.Load("/tiles/floor_outside.png").<Texture>As());
 		   
 		   
 		   this.TileTextures.put("f", Asset.Load("/tiles/prison_floor.png").<Texture>As());

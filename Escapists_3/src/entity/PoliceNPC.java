@@ -3,6 +3,7 @@ package entity;
 import java.awt.FontFormatException;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import assets.Asset;
@@ -10,6 +11,16 @@ import assets.Texture;
 import main.Input;
 import math.Vector2;
 import renderer.Renderer;
+
+class PoliceMovementData {
+	int TargetPosition;
+	String Axis;
+	
+	PoliceMovementData(String axis, int targetPosition) {
+		this.TargetPosition = targetPosition;
+		this.Axis = axis;
+	}
+}
 
 public class PoliceNPC implements Entity {
 	
@@ -24,14 +35,30 @@ public class PoliceNPC implements Entity {
 	String Direction = "down";
 	int AnimationIndex = 0;
 	double AccumulatedTimeStep = 0.0;
-
+	
+	// Pre-defined movement for the police
+	ArrayList<PoliceMovementData> PoliceMovementMap = new ArrayList<PoliceMovementData>();
+	int MovementPoliceIndex = 0;
 	
 	@Override
 	public void OnInitialize(Scene hierarchyScene) {
-		this.Position = new Vector2(50 * Renderer.TILE_SIZE, 60 * Renderer.TILE_SIZE);
+		this.Position = new Vector2(25 * Renderer.TILE_SIZE - Renderer.TILE_SIZE / 2, 64 * Renderer.TILE_SIZE);
 		this.HierarchyScene = hierarchyScene;
 		
 		LoadPlayerAssets();
+		
+		PoliceMovementMap.add(new PoliceMovementData("Y", 74 * Renderer.TILE_SIZE - Renderer.TILE_SIZE / 2));
+		PoliceMovementMap.add(new PoliceMovementData("X", 78 * Renderer.TILE_SIZE - Renderer.TILE_SIZE / 2));
+		PoliceMovementMap.add(new PoliceMovementData("X", 46 * Renderer.TILE_SIZE));
+		PoliceMovementMap.add(new PoliceMovementData("Y", 60 * Renderer.TILE_SIZE - Renderer.TILE_SIZE / 2));
+		PoliceMovementMap.add(new PoliceMovementData("X", 58 * Renderer.TILE_SIZE));
+		
+		PoliceMovementMap.add(new PoliceMovementData("X", 46 * Renderer.TILE_SIZE));
+		PoliceMovementMap.add(new PoliceMovementData("Y", 74 * Renderer.TILE_SIZE - Renderer.TILE_SIZE / 2));
+		PoliceMovementMap.add(new PoliceMovementData("X", 25 * Renderer.TILE_SIZE - Renderer.TILE_SIZE / 2));
+		PoliceMovementMap.add(new PoliceMovementData("Y", 64 * Renderer.TILE_SIZE));
+		//PoliceMovementMap.add(new PoliceMovementData("Y", 64 * Renderer.TILE_SIZE));
+		
 	}
 	
 	public void LoadPlayerAssets() {
@@ -71,8 +98,24 @@ public class PoliceNPC implements Entity {
 	public void OnUpdate(double timeStep) {
 		UpdateAnimation(timeStep);
 		
-		//GoOnXAxis(timeStep, 80 * Renderer.TILE_SIZE);
-		GoOnYAxis(timeStep, 80 * Renderer.TILE_SIZE);
+		if(this.MovementPoliceIndex == this.PoliceMovementMap.size()) {
+			this.MovementPoliceIndex = 0;
+		}
+		
+		boolean hasCompletedPath = false;
+		
+		PoliceMovementData movementData = this.PoliceMovementMap.get(MovementPoliceIndex);
+		
+		if(movementData.Axis == "X") {
+			hasCompletedPath = GoOnXAxis(timeStep, movementData.TargetPosition);
+		} else if(movementData.Axis == "Y") {
+			hasCompletedPath = GoOnYAxis(timeStep, movementData.TargetPosition);
+		}
+		
+		if(hasCompletedPath) {
+			this.MovementPoliceIndex++;
+		}
+		
 	}
 
 	@Override
@@ -151,7 +194,6 @@ public class PoliceNPC implements Entity {
 		Texture image = this.PoliceAnimationTexture.get(this.Direction)[this.AnimationIndex];
 	    
 		Renderer.Submit(this.Position, new Vector2(Renderer.TILE_SIZE), image);
-	    
 	}
 	
 }

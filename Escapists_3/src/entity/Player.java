@@ -22,7 +22,7 @@ public class Player implements Entity {
 	
 	// Movement
 	Vector2 Position;
-	int PlayerSpeed = 4;
+	int PlayerSpeed = 15;
 
 	// Texture/Animations
 	HashMap<String, Texture[]> PlayerAnimationTexture = new HashMap<>();
@@ -30,12 +30,11 @@ public class Player implements Entity {
 	int AnimationIndex = 0;
 	double AccumulatedTimeStep = 0.0;
 
-	
 	PlayerInventory Inventory;
 	
 	@Override
 	public void OnInitialize(Scene hierarchyScene) {
-		this.Position = new Vector2(50 * Renderer.TILE_SIZE, 50 * Renderer.TILE_SIZE);
+		this.Position = new Vector2(56 * Renderer.TILE_SIZE, 72 * Renderer.TILE_SIZE);
 		this.HierarchyScene = hierarchyScene;
 		this.Inventory = new PlayerInventory();
 		

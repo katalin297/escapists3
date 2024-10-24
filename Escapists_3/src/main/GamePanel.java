@@ -1,5 +1,6 @@
 package main;
 
+import entity.BasketBallField;
 import entity.Player;
 import entity.PoliceNPC;
 import entity.Scene;
@@ -45,6 +46,9 @@ public class GamePanel extends JPanel implements Runnable {
    
    void SetUpScene() {
 	   // Set up the scene
+	   BasketBallField basketBallField = new BasketBallField();
+	   GameScene.AddEntity(basketBallField);
+	   
 	   Player player = new Player();
 	   GameScene.AddEntity(player);
 	   
