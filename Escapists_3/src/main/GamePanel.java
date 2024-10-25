@@ -1,6 +1,8 @@
 package main;
 
 import entity.BasketBallField;
+import entity.Chest;
+import entity.CraftingTable;
 import entity.Player;
 import entity.PoliceNPC;
 import entity.Scene;
@@ -61,6 +63,13 @@ public class GamePanel extends JPanel implements Runnable {
 	   
 	   PoliceNPC policeNPC = new PoliceNPC();
 	   GameScene.AddEntity(policeNPC);
+	   
+	   CraftingTable craftingTable = new CraftingTable();
+	   GameScene.AddEntity(craftingTable);
+	   
+	   Chest chest = new Chest();
+	   GameScene.AddEntity(chest);
+	   
 	   
 	   GenerateTrees();
 	   

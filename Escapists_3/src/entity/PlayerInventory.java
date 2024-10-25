@@ -18,12 +18,31 @@ public class PlayerInventory {
 	
 	public PlayerInventory() {
 		try {
-			this.ItemTextures.put("wood",   Asset.Load("/items/wood.png").<Texture>As());
+			this.ItemTextures.put("wood",    Asset.Load("/items/wood.png").<Texture>As());
 			this.ItemTextures.put("pickaxe", Asset.Load("/items/pickaxe.png").<Texture>As());
 			
 		} catch (IOException | FontFormatException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean HasItem(String itemName) {
+		for(int i = 0; i < this.Items.size(); i++) {
+			if(this.Items.get(i) == itemName) { 
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void AddItemName(String itemName) {
+		for(int i = 0; i < this.Items.size(); i++) {
+			if(this.Items.get(i) == itemName) { 
+				return;
+			}
+		}
+		
+		this.Items.add(itemName);
 	}
 	
 	public void OnDraw() {
@@ -73,15 +92,4 @@ public class PlayerInventory {
 		
 		   
 	}
-	
-	public void AddItemName(String itemName) {
-		for(int i = 0; i < this.Items.size(); i++) {
-			if(this.Items.get(i) == itemName) { 
-				return;
-			}
-		}
-		
-		this.Items.add(itemName);
-	}
-	
 }

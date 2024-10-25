@@ -41,6 +41,7 @@ public class Tree implements Entity {
         
 	}
 
+	// Only used for registering only one key press (even if the user holds the key)
 	boolean PressedOnce = false;
 	
 	@Override
@@ -54,33 +55,50 @@ public class Tree implements Entity {
 		
 		
 		if(distance < 13.0) {
-			centerPositionTree = new Vector2(centerPositionTree.X - 74, centerPositionTree.Y + 20);
-			playerWorldPos = this.PlayerEntity.Position;
-			UserInterface.DrawText(centerPositionTree.minus(playerWorldPos), 32, "CUT TREE");
 			
-			centerPositionTree = new Vector2(centerPositionTree.X + 18, centerPositionTree.Y + 20);
-			UserInterface.DrawText(centerPositionTree.minus(playerWorldPos), 24, "(PRESS T)");
-			
-			
-			centerPositionTree = new Vector2(centerPositionTree.X - 36, centerPositionTree.Y - 340);
-			UserInterface.DrawText(centerPositionTree.minus(playerWorldPos), 32, "HP: " + this.HealthPoint + "/100");
-			
-			
-			
-			if(Input.IsKeyPressed(KeyEvent.VK_T)) {
+			if(this.PlayerEntity.Inventory.HasItem("pickaxe")) {
+				centerPositionTree = new Vector2(centerPositionTree.X - 74, centerPositionTree.Y + 20);
+				playerWorldPos = this.PlayerEntity.Position;
+				UserInterface.DrawText(centerPositionTree.minus(playerWorldPos), 32, "CUT TREE");
 				
-				if(!this.PressedOnce) {
-					this.HealthPoint -= 10;
+				centerPositionTree = new Vector2(centerPositionTree.X + 18, centerPositionTree.Y + 20);
+				UserInterface.DrawText(centerPositionTree.minus(playerWorldPos), 24, "(PRESS T)");
+				
+				centerPositionTree = new Vector2(centerPositionTree.X - 36, centerPositionTree.Y - 340);
+				UserInterface.DrawText(centerPositionTree.minus(playerWorldPos), 32, "HP: " + this.HealthPoint + "/100");
+				
+				if(Input.IsKeyPressed(KeyEvent.VK_T)) {
 					
-					if(this.HealthPoint == 0) {
-						this.PlayerEntity.AddItem("wood");
+					if(!this.PressedOnce) {
+						this.HealthPoint -= 10;
+						
+						if(this.HealthPoint == 0) {
+							this.PlayerEntity.AddItem("wood");
+						}
 					}
+					this.PressedOnce = true;
 				}
-				this.PressedOnce = true;
+				else {
+					this.PressedOnce = false;
+				}
+				
 			}
 			else {
-				this.PressedOnce = false;
+				centerPositionTree = new Vector2(centerPositionTree.X - 130, centerPositionTree.Y + 20);
+				playerWorldPos = this.PlayerEntity.Position;
+				UserInterface.DrawText(centerPositionTree.minus(playerWorldPos), 24, "YOU CANT CUT THIS TREE");
+				
+				centerPositionTree = new Vector2(centerPositionTree.X + 40, centerPositionTree.Y - 340);
+				UserInterface.DrawText(centerPositionTree.minus(playerWorldPos), 32, "HP: " + this.HealthPoint + "/100");
+				
 			}
+			
+			
+			
+			
+			
+			
+			
 		}
 		
 	}
