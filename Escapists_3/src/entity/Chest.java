@@ -41,18 +41,18 @@ public class Chest implements Entity {
 	
 	@Override
 	public void OnUpdate(double timeStep) {
-		Vector2 centerPositionObject = new Vector2(this.Position.X + Renderer.TILE_SIZE / 2, this.Position.Y + Renderer.TILE_SIZE / 2);
+		Vector2 centerPositionObject = new Vector2(this.Position.X, this.Position.Y);
 		Vector2 playerWorldPos = this.PlayerEntity.GetWorldPosition();
-		double distance = Vector2.Distance(centerPositionObject, this.PlayerEntity.GetWorldPosition());
+		double distance = Vector2.Distance(centerPositionObject, playerWorldPos);
 		
-		if(distance < 12.0) {
+		if(distance < 96.0) {
 
 
-			centerPositionObject = new Vector2(centerPositionObject.X - 108, centerPositionObject.Y - 60);
+			centerPositionObject = new Vector2(centerPositionObject.X - 76, centerPositionObject.Y - 42);
 			playerWorldPos = this.PlayerEntity.Position;
 			UserInterface.DrawText(centerPositionObject.minus(playerWorldPos), 32, "Get pickaxe");
 
-			centerPositionObject = new Vector2(centerPositionObject.X + 56, centerPositionObject.Y + 24);
+			centerPositionObject = new Vector2(centerPositionObject.X + 48, centerPositionObject.Y + 24);
 			playerWorldPos = this.PlayerEntity.Position;
 			UserInterface.DrawText(centerPositionObject.minus(playerWorldPos), 24, "(PRESS F)");
 			
@@ -83,7 +83,7 @@ public class Chest implements Entity {
 
 	@Override
 	public String GetEntityName() {
-		return "CraftingTable";
+		return "Chest";
 	}
 
 }

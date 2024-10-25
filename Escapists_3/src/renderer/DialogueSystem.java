@@ -34,7 +34,7 @@ public class DialogueSystem {
 		
 		if(DialogueQueueData.size() > 0) {
 			
-			if(TimeStepDelay > 10.0) {
+			if(TimeStepDelay > 3.0) {
 				
 				DialogueData dialogueData = DialogueQueueData.peek(); // Access the front element
 				

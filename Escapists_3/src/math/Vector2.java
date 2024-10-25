@@ -53,7 +53,7 @@ public class Vector2 {
     }
     
     public static double Distance(Vector2 other1, Vector2 other2) {
-    	return Math.sqrt( (double)Math.abs(other1.X - other2.X) + (double)Math.abs(other1.Y - other2.Y) );
+    	return Math.sqrt( (double)Math.pow(other1.X - other2.X, 2) + (double)Math.pow(other1.Y - other2.Y, 2) );
     }
 
     // Overriding the toString method for better readability

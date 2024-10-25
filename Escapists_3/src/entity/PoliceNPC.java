@@ -10,6 +10,7 @@ import assets.Asset;
 import assets.Texture;
 import main.Input;
 import math.Vector2;
+import renderer.DialogueSystem;
 import renderer.Renderer;
 
 class PoliceMovementData {
@@ -25,6 +26,7 @@ class PoliceMovementData {
 public class PoliceNPC implements Entity {
 	
 	public Scene HierarchyScene = null;
+	Player PlayerEntity = null;
 	
 	// Movement
 	Vector2 Position;
@@ -44,6 +46,8 @@ public class PoliceNPC implements Entity {
 	public void OnInitialize(Scene hierarchyScene) {
 		this.Position = new Vector2(25 * Renderer.TILE_SIZE - Renderer.TILE_SIZE / 2, 64 * Renderer.TILE_SIZE);
 		this.HierarchyScene = hierarchyScene;
+		
+		this.PlayerEntity = (Player)hierarchyScene.GetEntityByName("Player");
 		
 		LoadPlayerAssets();
 		
@@ -94,8 +98,54 @@ public class PoliceNPC implements Entity {
 		}
 	}
 
+	boolean HasPlayerBeenCaught = false;
+	boolean PressedOnce = false;
+	int NrPressedKey = 0;
+	
 	@Override
 	public void OnUpdate(double timeStep) {
+		
+		
+		
+		if(HasPlayerBeenCaught) {
+			
+			if(Input.IsKeyPressed(KeyEvent.VK_ENTER)) {
+				
+				if(!this.PressedOnce) {
+					NrPressedKey++;
+				}
+				this.PressedOnce = true;
+			}
+			else {
+				this.PressedOnce = false;
+			}
+			
+			
+			if(NrPressedKey == 3) {
+				NrPressedKey = 0;
+				HasPlayerBeenCaught = false;
+				this.PressedOnce = false;
+			}
+			
+			
+			this.Direction = "idle";
+			return;
+		}
+		
+		Vector2 centerPositionPolice = new Vector2(this.Position.X, this.Position.Y);
+		Vector2 playerWorldPos = this.PlayerEntity.GetWorldPosition();
+		double distance = Vector2.Distance(centerPositionPolice, playerWorldPos);
+		
+		if((distance < (Renderer.TILE_SIZE * 4)) && this.PlayerEntity.Inventory.HasAnyItems()) {
+			HasPlayerBeenCaught = true;
+			DialogueSystem.DrawDialogue("Police Officer", "What do we have here?");
+			DialogueSystem.DrawDialogue("Police Officer", "Why do you have a pickaxe?");
+			DialogueSystem.DrawDialogue("Police Officer", "This is mine now!!!");
+			this.PlayerEntity.Inventory.Clear();
+		}
+		
+		
+		
 		UpdateAnimation(timeStep);
 		
 		if(this.MovementPoliceIndex == this.PoliceMovementMap.size()) {
@@ -115,6 +165,8 @@ public class PoliceNPC implements Entity {
 		if(hasCompletedPath) {
 			this.MovementPoliceIndex++;
 		}
+		
+		
 		
 	}
 

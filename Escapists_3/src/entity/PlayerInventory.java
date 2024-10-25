@@ -35,6 +35,10 @@ public class PlayerInventory {
 		return false;
 	}
 	
+	public boolean HasAnyItems() {
+		return this.Items.size() > 0; 
+	}
+	
 	public void AddItemName(String itemName) {
 		for(int i = 0; i < this.Items.size(); i++) {
 			if(this.Items.get(i) == itemName) { 
@@ -43,6 +47,10 @@ public class PlayerInventory {
 		}
 		
 		this.Items.add(itemName);
+	}
+	
+	public void Clear() {
+		this.Items = new ArrayList<String>();
 	}
 	
 	public void OnDraw() {

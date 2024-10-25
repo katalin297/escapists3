@@ -54,7 +54,7 @@ public class Tree implements Entity {
 		double distance = Vector2.Distance(centerPositionTree, this.PlayerEntity.GetWorldPosition());
 		
 		
-		if(distance < 13.0) {
+		if(distance < 144.0) {
 			
 			if(this.PlayerEntity.Inventory.HasItem("pickaxe")) {
 				centerPositionTree = new Vector2(centerPositionTree.X - 74, centerPositionTree.Y + 20);
