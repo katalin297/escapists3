@@ -9,6 +9,7 @@ import java.util.HashMap;
 import assets.Asset;
 import assets.AssetType;
 import assets.Texture;
+import main.Application;
 import main.Input;
 import math.BoundingBox;
 import math.Vector2;
@@ -160,6 +161,22 @@ public class Player implements Entity {
 	    Renderer.Submit(this.HierarchyScene.GetPrimaryCamera().CenterOfScreen, new Vector2(Renderer.TILE_SIZE), image, true);
 	    
 	    this.Inventory.OnDraw();
+	}
+	
+	public Vector2 GetWorldPosition() { 
+		return new Vector2(
+				this.Position.X + (Application.SCREEN_WIDTH / 2)  - (Renderer.TILE_SIZE / 2),
+				this.Position.Y + (Application.SCREEN_HEIGHT / 2) - (Renderer.TILE_SIZE / 2)
+			);
+	}
+	
+	@Override
+	public String GetEntityName() {
+		return "Player";
+	}
+	
+	public void AddItem(String itemName) {
+		this.Inventory.AddItemName(itemName);
 	}
 	
 }

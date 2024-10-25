@@ -79,6 +79,10 @@ public class Renderer {
 			
 			if(currentData == null) { continue; }
 			
+//			if(currentData.EntityTexture == null) {
+//				return;
+//			}
+			
 			
 			Vector2 screenPosition = camera.ComputeScreenPosition(currentData.Position);
 			

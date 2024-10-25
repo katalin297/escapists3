@@ -138,8 +138,8 @@ public class TileManager {
 		   
 		   
 		   this.TileTextures.put("f", Asset.Load("/tiles/prison_floor.png").<Texture>As());
-		   this.TileTextures.put("m", Asset.Load("/tiles/earth.png").<Texture>As());
-		   this.TileTextures.put("n", Asset.Load("/tiles/wall.png").<Texture>As()); // change (to dark)
+		   this.TileTextures.put("m", Asset.Load("/tiles/stone.png").<Texture>As());
+		   this.TileTextures.put("n", Asset.Load("/tiles/stone_dark.png").<Texture>As()); // change (to dark)
 		   
 		   
 		   

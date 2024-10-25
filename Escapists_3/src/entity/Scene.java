@@ -55,4 +55,15 @@ public class Scene {
 		SceneCamera.UpdateCameraPosition(position);
 	}
 	
+	public Entity GetEntityByName(String name) {
+		for(int i = 0; i < this.Entities.size(); i++) {
+			Entity currentEntity = this.Entities.get(i);
+			if(currentEntity.GetEntityName() == name) {
+				return currentEntity;
+			}
+		}
+		
+		return null;
+	}
+	
 }

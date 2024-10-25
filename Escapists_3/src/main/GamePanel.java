@@ -4,6 +4,7 @@ import entity.BasketBallField;
 import entity.Player;
 import entity.PoliceNPC;
 import entity.Scene;
+import entity.Tree;
 import math.Vector2;
 import math.Vector4;
 import physics.PhysicsSystem;
@@ -15,6 +16,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Random;
 
 import javax.swing.JPanel;
 import tile.TileManager;
@@ -33,7 +35,12 @@ public class GamePanel extends JPanel implements Runnable {
 	   ConfigureWindow();
 	   Renderer.Initialize();
 	   
+	   UserInterface.Initalize();
+	   DialogueSystem.Initalize();
+	   PhysicsSystem.Initialize();	   
+
 	   SetUpScene(); 
+	   
    }
    
    void ConfigureWindow() {
@@ -55,19 +62,19 @@ public class GamePanel extends JPanel implements Runnable {
 	   PoliceNPC policeNPC = new PoliceNPC();
 	   GameScene.AddEntity(policeNPC);
 	   
+	   GenerateTrees();
 	   
 	   
-	   PhysicsSystem.Initialize();
+	   
 	   GameScene.OnInitalize();
 	   TileManager.Initialize();
-	   UserInterface.Initalize();
-	   DialogueSystem.Initalize();
-	   
 	   
 	   DialogueSystem.DrawDialogue("Player", "Welcome to the game!");
 	   DialogueSystem.DrawDialogue("Player", "Denis cel mai pizdos");
 	   DialogueSystem.DrawDialogue("Player", "Catalin gay");
    }
+   
+   
    
    public void Update(double timeStep) {
 	   // Begin preparing the scene
@@ -145,6 +152,73 @@ public class GamePanel extends JPanel implements Runnable {
       
       // Release the graphics handler from memory
       graphicsAPI.dispose();
+   }
+   
+   public void GenerateTrees() {
+	   Random random = new Random();
+	   for (int i = 0; i < 4; i++) {   
+	       int randomNumber = random.nextInt(20) - 10;
+		   Tree tree = new Tree(
+				   new Vector2(16 * Renderer.TILE_SIZE + i * 8 * Renderer.TILE_SIZE, 52 * Renderer.TILE_SIZE + 10 - randomNumber)
+		   );
+		   GameScene.AddEntity(tree);		   
+	   }
+	   
+	   for (int i = 0; i < 2; i++) {   
+	       int randomNumber = random.nextInt(20) - 10;
+		   Tree tree = new Tree(
+				   new Vector2(50 * Renderer.TILE_SIZE + i * 5 * Renderer.TILE_SIZE, 52 * Renderer.TILE_SIZE + 10 - randomNumber)
+		   );
+		   GameScene.AddEntity(tree);		   
+	   }
+	   for (int i = 0; i < 2; i++) {   
+	       int randomNumber = random.nextInt(20) - 10;
+		   Tree tree = new Tree(
+				   new Vector2(75 * Renderer.TILE_SIZE + i * 5 * Renderer.TILE_SIZE, 52 * Renderer.TILE_SIZE + 10 - randomNumber)
+		   );
+		   GameScene.AddEntity(tree);		   
+	   }
+	   
+	   for (int i = 0; i < 2; i++) {   
+	       int randomNumber = random.nextInt(20) - 10;
+		   Tree tree = new Tree(
+				   new Vector2(50 * Renderer.TILE_SIZE + i * 6 * Renderer.TILE_SIZE, 61 * Renderer.TILE_SIZE + 10 - randomNumber)
+		   );
+		   GameScene.AddEntity(tree);		   
+	   }
+	   for (int i = 0; i < 1; i++) {   
+	       int randomNumber = random.nextInt(20) - 10;
+		   Tree tree = new Tree(
+				   new Vector2(78 * Renderer.TILE_SIZE + i * 6 * Renderer.TILE_SIZE, 61 * Renderer.TILE_SIZE + 10 - randomNumber)
+		   );
+		   GameScene.AddEntity(tree);		   
+	   }
+	   
+	   
+	   for (int i = 0; i < 2; i++) {
+	       int randomNumber = random.nextInt(20) - 10;
+		   Tree tree = new Tree(
+				   new Vector2(33 * Renderer.TILE_SIZE + i * 7 * Renderer.TILE_SIZE, 59 * Renderer.TILE_SIZE + 10 - randomNumber)
+		   );
+		   GameScene.AddEntity(tree);		   
+	   }
+	   
+	   for (int i = 0; i < 4; i++) {
+		   
+	       int randomNumber = random.nextInt(20) - 10;
+		   Tree tree = new Tree(
+				   new Vector2(20 * Renderer.TILE_SIZE + i * 7 * Renderer.TILE_SIZE, 66 * Renderer.TILE_SIZE + 10 - randomNumber)
+		   );
+		   GameScene.AddEntity(tree);		   
+	   }
+	   for (int i = 0; i < 4; i++) {
+		   
+	       int randomNumber = random.nextInt(20) - 10;
+		   Tree tree = new Tree(
+				   new Vector2(18 * Renderer.TILE_SIZE + i * 9 * Renderer.TILE_SIZE, 76 * Renderer.TILE_SIZE + 10 - randomNumber)
+		   );
+		   GameScene.AddEntity(tree);		   
+	   }
    }
 
 }

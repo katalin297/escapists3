@@ -192,8 +192,12 @@ public class PoliceNPC implements Entity {
 	@Override
 	public void OnDraw() {
 		Texture image = this.PoliceAnimationTexture.get(this.Direction)[this.AnimationIndex];
-	    
 		Renderer.Submit(this.Position, new Vector2(Renderer.TILE_SIZE), image);
+	}
+	
+	@Override
+	public String GetEntityName() {
+		return "PoliceNPC";
 	}
 	
 }

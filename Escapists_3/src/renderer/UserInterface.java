@@ -11,22 +11,28 @@ import java.util.ArrayList;
 
 import assets.Asset;
 import assets.FontText;
+import assets.Texture;
 import math.Vector2;
 import math.Vector4;
 
 class InterfaceRenderData {
-	
+	// For rectangles
 	Vector2 Position = new Vector2();
 	Vector2 Scale = new Vector2();
 	Vector4 Color = new Vector4();
 	int RoundedCorner = 0;
 	
+	// For rectangles with stroke
 	int StrokeSize = 0;
 	Vector4 StrokeColor = new Vector4();
 	int StrokeRoundedCorner = 0;
 	
+	// For text
 	String ObjetType = "";
 	String Data = ""; // For string
+	
+	// For images
+	Texture Image = null;
 	
 	
 	public InterfaceRenderData(Vector2 position, Vector2 scale, Vector4 color, int roundedCorner) {
@@ -53,6 +59,13 @@ class InterfaceRenderData {
 		this.Data = dataText;
 		this.Position = position;
 		this.Scale = new Vector2(fontSize);
+	}
+	
+	public InterfaceRenderData(Vector2 position, Vector2 scale, Texture texture) {
+		this.ObjetType = "Image";
+		this.Position = position;
+		this.Scale = scale;
+		this.Image = texture;
 	}
 	
 }
@@ -83,6 +96,10 @@ public class UserInterface {
 	
 	public static void DrawText(Vector2 position, int scale, String textData) {
 		RenderData.add(new InterfaceRenderData(position, scale, textData));
+	}
+	
+	public static void DrawImage(Vector2 position, Vector2 scale, Texture texture) {
+		RenderData.add(new InterfaceRenderData(position, scale, texture));
 	}
 	
 	public static void OnDraw(Graphics2D graphicsAPI) {
@@ -123,8 +140,19 @@ public class UserInterface {
 					break;
 				}
 				case "Text": {
+					Color c = new Color(255, 255, 255, 255);
+					graphicsAPI.setColor(c);
 					graphicsAPI.setFont(graphicsAPI.getFont().deriveFont(Font.PLAIN, renderData.Scale.X));
 					graphicsAPI.drawString(renderData.Data, renderData.Position.X, renderData.Position.Y);
+					break;
+				}
+				case "Image": {
+					graphicsAPI.drawImage(
+							renderData.Image.InternalImage,
+							renderData.Position.X, renderData.Position.Y,
+							renderData.Scale.X, renderData.Scale.Y,
+							null
+					);
 					break;
 				}
 				

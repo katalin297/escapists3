@@ -5,4 +5,5 @@ interface Entity {
 	public void OnUpdate(double timeStep);
 	public void OnPhysicsUpdate(double timeStep);
 	public void OnDraw();
+	public String GetEntityName();
 }

@@ -39,4 +39,9 @@ public class BasketBallField implements Entity {
 		Renderer.Submit(this.Position, new Vector2(912, 640), this.BasketBallFieldTexture);
 	}
 
+	@Override
+	public String GetEntityName() {
+		return "BasketBallField";
+	}
+
 }
