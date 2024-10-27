@@ -36,6 +36,9 @@ public class CraftingTable implements Entity {
 		
 	}
 
+	// Only used for registering only one key press (even if the user holds the key)
+	boolean PressedOnce = false;
+		
 	@Override
 	public void OnUpdate(double timeStep) {
 		Vector2 centerPositionObject = new Vector2(this.Position.X, this.Position.Y);
@@ -44,9 +47,45 @@ public class CraftingTable implements Entity {
 		
 		if(distance < 96.0) {
 
-			centerPositionObject = new Vector2(centerPositionObject.X - 96, centerPositionObject.Y - 24);
-			playerWorldPos = this.PlayerEntity.Position;
-			UserInterface.DrawText(centerPositionObject.minus(playerWorldPos), 24, "Not enough materials");
+			if(this.PlayerEntity.Inventory.HasItem("wood") && this.PlayerEntity.Inventory.HasItem("stone")) {
+//				centerPositionObject = new Vector2(centerPositionObject.X, centerPositionObject.Y);
+//				playerWorldPos = this.PlayerEntity.Position;
+//				UserInterface.DrawText(centerPositionObject.minus(playerWorldPos), 32, "CRAFT SHOVEL");
+//				
+//				centerPositionObject = new Vector2(centerPositionObject.X + 20, centerPositionObject.Y + 20);
+//				UserInterface.DrawText(centerPositionObject.minus(playerWorldPos), 24, "(PRESS T)");
+//				
+				
+				centerPositionObject = new Vector2(centerPositionObject.X - 64, centerPositionObject.Y - 24);
+				playerWorldPos = this.PlayerEntity.Position;
+				UserInterface.DrawText(centerPositionObject.minus(playerWorldPos), 32, "CRAFT SHOVEL");
+				
+				centerPositionObject = new Vector2(centerPositionObject.X + 48, centerPositionObject.Y + 20);
+				UserInterface.DrawText(centerPositionObject.minus(playerWorldPos), 24, "(PRESS T)");
+				
+				
+				if(Input.IsKeyPressed(KeyEvent.VK_T)) {
+					
+					if(!this.PressedOnce) {
+						
+						this.PlayerEntity.RemoveItem("wood");
+						this.PlayerEntity.RemoveItem("stone");
+						this.PlayerEntity.AddItem("shovel");
+						
+					}
+					this.PressedOnce = true;
+				}
+				else {
+					this.PressedOnce = false;
+				}
+				
+			}
+			else {
+				centerPositionObject = new Vector2(centerPositionObject.X - 96, centerPositionObject.Y - 24);
+				playerWorldPos = this.PlayerEntity.Position;
+				UserInterface.DrawText(centerPositionObject.minus(playerWorldPos), 24, "Not enough materials");				
+			}
+			
 
 			// Dont delete!!!!!!!!!!!
 //			centerPositionObject = new Vector2(centerPositionObject.X - 76, centerPositionObject.Y - 32);

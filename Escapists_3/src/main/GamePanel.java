@@ -6,6 +6,7 @@ import entity.CraftingTable;
 import entity.Player;
 import entity.PoliceNPC;
 import entity.Scene;
+import entity.Stone;
 import entity.Tree;
 import math.Vector2;
 import math.Vector4;
@@ -70,7 +71,7 @@ public class GamePanel extends JPanel implements Runnable {
 	   Chest chest = new Chest();
 	   GameScene.AddEntity(chest);
 	   
-	   
+	   GenerateStones();
 	   GenerateTrees();
 	   
 	   
@@ -161,6 +162,20 @@ public class GamePanel extends JPanel implements Runnable {
       
       // Release the graphics handler from memory
       graphicsAPI.dispose();
+   }
+   
+   public void GenerateStones() {
+	   Stone stone1 = new Stone(new Vector2(42 * Renderer.TILE_SIZE, 16 * Renderer.TILE_SIZE), Renderer.TILE_SIZE * 4); 
+	   GameScene.AddEntity(stone1);
+	   
+	   Stone stone2 = new Stone(new Vector2(50 * Renderer.TILE_SIZE+ Renderer.TILE_SIZE / 2, 15 * Renderer.TILE_SIZE + Renderer.TILE_SIZE / 2), Renderer.TILE_SIZE * 3); 
+	   GameScene.AddEntity(stone2);
+	   
+	   Stone stone3 = new Stone(new Vector2(40 * Renderer.TILE_SIZE, 26 * Renderer.TILE_SIZE), Renderer.TILE_SIZE * 3 + Renderer.TILE_SIZE / 2); 
+	   GameScene.AddEntity(stone3);
+	   
+	   Stone stone4 = new Stone(new Vector2(48 * Renderer.TILE_SIZE + Renderer.TILE_SIZE / 2, 27 * Renderer.TILE_SIZE + Renderer.TILE_SIZE / 2), Renderer.TILE_SIZE * 4); 
+	   GameScene.AddEntity(stone4);
    }
    
    public void GenerateTrees() {

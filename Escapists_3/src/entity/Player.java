@@ -23,7 +23,7 @@ public class Player implements Entity {
 	
 	// Movement
 	Vector2 Position;
-	int PlayerSpeed = 15;
+	int PlayerSpeed = 5;
 
 	// Texture/Animations
 	HashMap<String, Texture[]> PlayerAnimationTexture = new HashMap<>();
@@ -177,6 +177,10 @@ public class Player implements Entity {
 	
 	public void AddItem(String itemName) {
 		this.Inventory.AddItemName(itemName);
+	}
+	
+	public void RemoveItem(String itemName) {
+		this.Inventory.RemoveItemName(itemName);
 	}
 	
 }

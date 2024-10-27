@@ -108,6 +108,8 @@ public class TileManager {
 		   this.TileTextures.put("w", Asset.Load("/tiles/water.png").<Texture>As());
 		   this.TileTextures.put("s", Asset.Load("/tiles/sand.png").<Texture>As());
 		   
+		   
+		   
 		   // Tower
 		   this.TileTextures.put("0", Asset.Load("/tiles/wall_tower/wall_tower_0.png").<Texture>As()); // change
 		   this.TileTextures.put("1", Asset.Load("/tiles/wall_tower/wall_tower_1.png").<Texture>As()); // change
@@ -139,7 +141,9 @@ public class TileManager {
 		   
 		   this.TileTextures.put("f", Asset.Load("/tiles/prison_floor.png").<Texture>As());
 		   this.TileTextures.put("m", Asset.Load("/tiles/stone.png").<Texture>As());
-		   this.TileTextures.put("n", Asset.Load("/tiles/stone_dark.png").<Texture>As()); // change (to dark)
+		   this.TileTextures.put("n", Asset.Load("/tiles/stone_dark.png").<Texture>As());
+		   this.TileTextures.put("d", Asset.Load("/tiles/stone_diamond.png").<Texture>As());
+		   this.TileTextures.put("a", Asset.Load("/tiles/stone_gold.png").<Texture>As());
 		   
 		   
 		   
