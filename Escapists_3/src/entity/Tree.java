@@ -9,12 +9,15 @@ import assets.Asset;
 import assets.Texture;
 import main.Input;
 import math.Vector2;
+import renderer.DialogueSystem;
 import renderer.Renderer;
 import renderer.UserInterface;
 
 public class Tree implements Entity {
 
 	public Scene HierarchyScene = null;
+	
+	static boolean FirstInteraction = true;
 	
 	Player PlayerEntity = null;
 	Texture TreeTexture = null;
@@ -93,6 +96,14 @@ public class Tree implements Entity {
 				
 			}
 			
+			
+			if(FirstInteraction) {
+				DialogueSystem.DrawDialogue("Player", "This is a nice looking tree!");
+				DialogueSystem.DrawDialogue("Player", "But we need a pickaxe to cut it.");
+				DialogueSystem.DrawDialogue("Player", "Find the building where the police stays.");
+				DialogueSystem.DrawDialogue("Player", "There you will a chest with what you need.");
+				FirstInteraction = false;
+			}
 			
 			
 			

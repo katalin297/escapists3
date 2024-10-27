@@ -69,7 +69,7 @@ public class DialogueSystem {
 			DialogueData dialogueData = DialogueQueueData.peek(); // Access the front element
 			
 			UserInterface.DrawRectangle(
-					new Vector2(60, 600), new Vector2(800, 240), new Vector4(0, 0, 0, 200), 32,
+					new Vector2(60, 600), new Vector2(860, 240), new Vector4(0, 0, 0, 200), 32,
 					5, new Vector4(255, 255, 255, 255), 22);
 			
 			UserInterface.DrawText(new Vector2(80, 650), 42, dialogueData.Name + ":");

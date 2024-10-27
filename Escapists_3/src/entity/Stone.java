@@ -67,16 +67,6 @@ public class Stone implements Entity {
 				playerWorldPos = this.PlayerEntity.Position;
 				UserInterface.DrawText(centerPositionObject.minus(playerWorldPos), 28, "YOU CANT GET STONE");				
 			}
-
-			// Dont delete!!!!!!!!!!!
-//			centerPositionObject = new Vector2(centerPositionObject.X - 76, centerPositionObject.Y - 32);
-//			playerWorldPos = this.PlayerEntity.Position;
-//			UserInterface.DrawText(centerPositionObject.minus(playerWorldPos), 32, "Craft Shovel");
-//
-//			centerPositionObject = new Vector2(centerPositionObject.X + 56, centerPositionObject.Y + 24);
-//			playerWorldPos = this.PlayerEntity.Position;
-//			UserInterface.DrawText(centerPositionObject.minus(playerWorldPos), 24, "(PRESS C)");
-
 		}
 		
 	}

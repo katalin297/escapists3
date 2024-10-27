@@ -3,6 +3,7 @@ package main;
 import entity.BasketBallField;
 import entity.Chest;
 import entity.CraftingTable;
+import entity.Hole;
 import entity.Player;
 import entity.PoliceNPC;
 import entity.Scene;
@@ -14,6 +15,7 @@ import physics.PhysicsSystem;
 import renderer.DialogueSystem;
 import renderer.Renderer;
 import renderer.UserInterface;
+import renderer.UserInterfaceOpening;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -30,7 +32,7 @@ public class GamePanel extends JPanel implements Runnable {
    Thread GameThread;
 
    TileManager TileManager = new TileManager();
-   Scene GameScene = new Scene();
+   Scene GameScene = new Scene(); 
 
    public GamePanel() {
     
@@ -42,6 +44,8 @@ public class GamePanel extends JPanel implements Runnable {
 	   DialogueSystem.Initalize();
 	   PhysicsSystem.Initialize();	   
 
+	   UserInterfaceOpening.OnInitialize(); 
+	   
 	   SetUpScene(); 
 	   
    }
@@ -59,6 +63,9 @@ public class GamePanel extends JPanel implements Runnable {
 	   BasketBallField basketBallField = new BasketBallField();
 	   GameScene.AddEntity(basketBallField);
 	   
+	   Hole hole = new Hole();
+	   GameScene.AddEntity(hole);
+	   
 	   Player player = new Player();
 	   GameScene.AddEntity(player);
 	   
@@ -71,6 +78,7 @@ public class GamePanel extends JPanel implements Runnable {
 	   Chest chest = new Chest();
 	   GameScene.AddEntity(chest);
 	   
+	   
 	   GenerateStones();
 	   GenerateTrees();
 	   
@@ -79,14 +87,22 @@ public class GamePanel extends JPanel implements Runnable {
 	   GameScene.OnInitalize();
 	   TileManager.Initialize();
 	   
+	   DialogueSystem.DrawDialogue("", "");
 	   DialogueSystem.DrawDialogue("Player", "Welcome to the game!");
-	   DialogueSystem.DrawDialogue("Player", "Denis cel mai pizdos");
-	   DialogueSystem.DrawDialogue("Player", "Catalin gay");
+	   DialogueSystem.DrawDialogue("Player", "Our main aim is to escape this prison!");
+	   DialogueSystem.DrawDialogue("Player", "We have to craft a shovel to escape!");
+	   DialogueSystem.DrawDialogue("Player", "Lets explore the world firstly.");
    }
    
    
    
    public void Update(double timeStep) {
+	   
+	   if(!UserInterfaceOpening.StartGame) {
+		   UserInterfaceOpening.OnUpdate();
+		   return;
+	   }
+	   
 	   // Begin preparing the scene
 	   Renderer.BeginScene();
 	   
@@ -144,21 +160,28 @@ public class GamePanel extends JPanel implements Runnable {
    public void paintComponent(Graphics graphicsAPI) {
       super.paintComponent(graphicsAPI);
       
-      // (Firstly draw the map, and after draw the characters over it)
-      // Draw the Map
-      TileManager.OnDraw();
+      if(!UserInterfaceOpening.StartGame || UserInterfaceOpening.FinishedGame) {
+    	  UserInterfaceOpening.OnDraw((Graphics2D)graphicsAPI);   
+      } else {
+    	  // (Firstly draw the map, and after draw the characters over it)
+          // Draw the Map
+          TileManager.OnDraw();
 
-      // Draw the objects in the whole game scene
-      GameScene.OnDraw();      
+          // Draw the objects in the whole game scene
+          GameScene.OnDraw(); 
+          
+          // Render the submited objects into the screen
+          Renderer.RenderFrame(this.GameScene.GetPrimaryCamera(), graphicsAPI);
+          
+          // Before rendering the UI, we should submit the draw calls to the UserInterface System
+          DialogueSystem.OnDraw();
+          
+          // Finally, draw the user interface (after everything was rendered)
+          UserInterface.OnDraw((Graphics2D)graphicsAPI);
+          
+      }
       
-      // Render the submited objects into the screen
-      Renderer.RenderFrame(this.GameScene.GetPrimaryCamera(), graphicsAPI);
       
-      // Before rendering the UI, we should submit the draw calls to the UserInterface System
-      DialogueSystem.OnDraw();
-      
-      // Finally, draw the user interface (after everything was rendered)
-      UserInterface.OnDraw((Graphics2D)graphicsAPI);
       
       // Release the graphics handler from memory
       graphicsAPI.dispose();

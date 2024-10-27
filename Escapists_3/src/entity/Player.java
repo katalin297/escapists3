@@ -23,7 +23,7 @@ public class Player implements Entity {
 	
 	// Movement
 	Vector2 Position;
-	int PlayerSpeed = 5;
+	int PlayerSpeed = 4;
 
 	// Texture/Animations
 	HashMap<String, Texture[]> PlayerAnimationTexture = new HashMap<>();

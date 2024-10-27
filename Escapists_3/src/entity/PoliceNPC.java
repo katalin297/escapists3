@@ -30,7 +30,7 @@ public class PoliceNPC implements Entity {
 	
 	// Movement
 	Vector2 Position;
-	int PoliceSpeed = 3;
+	int PoliceSpeed = 4;
 	
 	// Texture/Animations
 	HashMap<String, Texture[]> PoliceAnimationTexture = new HashMap<>();

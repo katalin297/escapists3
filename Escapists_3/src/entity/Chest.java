@@ -8,10 +8,14 @@ import assets.Asset;
 import assets.Texture;
 import main.Input;
 import math.Vector2;
+import renderer.DialogueSystem;
 import renderer.Renderer;
 import renderer.UserInterface;
 
 public class Chest implements Entity {
+
+	static boolean FirstInteraction = true;
+	static boolean FirstGrabingItem = true;
 
 	public Scene HierarchyScene = null;
 	
@@ -59,13 +63,30 @@ public class Chest implements Entity {
 			if(Input.IsKeyPressed(KeyEvent.VK_F)) {
 				
 				if(!this.PressedOnce) {
+					
 					this.PlayerEntity.AddItem("pickaxe");
+					
+					if(FirstGrabingItem) {
+						DialogueSystem.DrawDialogue("Player", "The pickaxe is a very useful tool!");
+						DialogueSystem.DrawDialogue("Player", "But be careful, if the police sees you with it.");
+						DialogueSystem.DrawDialogue("Player", "They will take all your items!");
+						FirstGrabingItem = false;						
+					}
+					
 					
 				}
 				this.PressedOnce = true;
 			}
 			else {
 				this.PressedOnce = false;
+			}
+			
+			if(FirstInteraction) {
+				DialogueSystem.DrawDialogue("Player", "Good job!");
+				DialogueSystem.DrawDialogue("Player", "You have found the police building!");
+				DialogueSystem.DrawDialogue("Player", "Now go grab your pickaxe");
+				DialogueSystem.DrawDialogue("Player", "and cut down some trees and stones");
+				FirstInteraction = false;
 			}
 		}
 		

@@ -8,12 +8,15 @@ import assets.Asset;
 import assets.Texture;
 import main.Input;
 import math.Vector2;
+import renderer.DialogueSystem;
 import renderer.Renderer;
 import renderer.UserInterface;
 
 public class CraftingTable implements Entity {
 
 	public Scene HierarchyScene = null;
+	
+	static boolean FirstInteraction = true;
 	
 	Vector2 Position = new Vector2();
 	Player PlayerEntity = null;
@@ -48,14 +51,7 @@ public class CraftingTable implements Entity {
 		if(distance < 96.0) {
 
 			if(this.PlayerEntity.Inventory.HasItem("wood") && this.PlayerEntity.Inventory.HasItem("stone")) {
-//				centerPositionObject = new Vector2(centerPositionObject.X, centerPositionObject.Y);
-//				playerWorldPos = this.PlayerEntity.Position;
-//				UserInterface.DrawText(centerPositionObject.minus(playerWorldPos), 32, "CRAFT SHOVEL");
-//				
-//				centerPositionObject = new Vector2(centerPositionObject.X + 20, centerPositionObject.Y + 20);
-//				UserInterface.DrawText(centerPositionObject.minus(playerWorldPos), 24, "(PRESS T)");
-//				
-				
+
 				centerPositionObject = new Vector2(centerPositionObject.X - 64, centerPositionObject.Y - 24);
 				playerWorldPos = this.PlayerEntity.Position;
 				UserInterface.DrawText(centerPositionObject.minus(playerWorldPos), 32, "CRAFT SHOVEL");
@@ -72,6 +68,13 @@ public class CraftingTable implements Entity {
 						this.PlayerEntity.RemoveItem("stone");
 						this.PlayerEntity.AddItem("shovel");
 						
+						DialogueSystem.DrawDialogue("Player", "Well done!!!");
+						DialogueSystem.DrawDialogue("Player", "You are almost ready to escape.");
+						DialogueSystem.DrawDialogue("Player", "You need to find a hole where you can escape.");
+						DialogueSystem.DrawDialogue("Player", "Using the shovel, it will be easier for you.");
+						DialogueSystem.DrawDialogue("Player", "Now go and explore the world to find the hole.");
+						DialogueSystem.DrawDialogue("Player", "Be careful, the police is still all eyes on you!");
+						
 					}
 					this.PressedOnce = true;
 				}
@@ -87,15 +90,13 @@ public class CraftingTable implements Entity {
 			}
 			
 
-			// Dont delete!!!!!!!!!!!
-//			centerPositionObject = new Vector2(centerPositionObject.X - 76, centerPositionObject.Y - 32);
-//			playerWorldPos = this.PlayerEntity.Position;
-//			UserInterface.DrawText(centerPositionObject.minus(playerWorldPos), 32, "Craft Shovel");
-//
-//			centerPositionObject = new Vector2(centerPositionObject.X + 56, centerPositionObject.Y + 24);
-//			playerWorldPos = this.PlayerEntity.Position;
-//			UserInterface.DrawText(centerPositionObject.minus(playerWorldPos), 24, "(PRESS C)");
-
+			if(FirstInteraction) {
+				DialogueSystem.DrawDialogue("Player", "Hmm... you can craft a shovel with this.");
+				DialogueSystem.DrawDialogue("Player", "But firstly, you need wood and stone.");
+				DialogueSystem.DrawDialogue("Player", "Go and find those!");
+				DialogueSystem.DrawDialogue("Player", "And come back and craft the final item.");
+				FirstInteraction = false;
+			}
 		}
 		
 	}
